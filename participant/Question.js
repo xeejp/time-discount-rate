@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import SwipeableViews from 'react-swipeable-views'
+import LinearProgress from 'material-ui/LinearProgress'
 import { next } from './actions'
 
 const mapStateToProps = ({ money,unit,ansed,question,slideIndex,rate}) => ({
@@ -13,9 +14,11 @@ const mapStateToProps = ({ money,unit,ansed,question,slideIndex,rate}) => ({
 class Question extends Component  {
     constructor(props) {
     super(props)
+    this.only = true
   }
 
   next(value) {
+    this.only = true
     const{ dispatch } = this.props
     dispatch(next(value))
   }
@@ -42,7 +45,7 @@ class Question extends Component  {
                 default:
                     return <span></span>
             }
-            return (<p>{str+money+unit}を受け取る</p>)                        
+            return (<p>{str}<br/>{money.toLocaleString()+unit}<br/>を受け取る</p>)                        
         })()}
      </div>
    </RaisedButton>
@@ -64,7 +67,7 @@ class Question extends Component  {
                     str = ""
                     break;
             }
-            return (<p>{str + Math.round(money * rate[type][1]) + unit}を受け取る</p>)                        
+            return (<p>{str}<br/>{Math.round(money * rate[type][1]/100).toLocaleString() + unit}<br/>を受け取る</p>)                        
         })()}
      </div>
    </RaisedButton>
@@ -73,9 +76,14 @@ class Question extends Component  {
 
   wait(){
 	  const {rate,slideIndex} = this.props
-      if(slideIndex == 7 || slideIndex == 15) setTimeout(this.next.bind(this, {choice:1 ,type: 3, rate: rate}),10000)
+      if(this.only && (slideIndex == 7 || slideIndex == 15)){
+          setTimeout(this.next.bind(this, {choice:1 ,type: 3, rate: rate}),10000)
+          this.only = false
+      }
       return(<div>
       <p>しばらくお待ちください</p>
+      <br/><br/><br/>
+      <LinearProgress mode="indeterminate" />
       </div>
       )
   }
@@ -83,7 +91,7 @@ class Question extends Component  {
   finish(){
 	  const {rate} = this.props
       return(<div>
-      <p>終わり</p>
+      <p>これで実験は終了です</p>
       <RaisedButton onClick={this.next.bind(this, {choice:1 ,type: 4, rate: rate})}>結果へ</RaisedButton>
       </div>
       )
@@ -94,37 +102,23 @@ class Question extends Component  {
     var Questions = question.concat()
     var index
     console.log(question)
-
+    var questionlist = []
+    var t= 0
+    for(var i = 0; i < 3; i++){
+        for(var j = 0; j < 7 ; j++){
+            questionlist[t++] = <div key = {t}>{this.Question_text(7*i+j)}</div>
+        }
+        questionlist[t++] = <div key = {t}>{this.wait()}</div>
+    }
+    
+    questionlist[t-1] = <div key = {t}>{this.finish()}</div>
     return (
         <div>
         	<p>実験画面</p>
       		<div style={{height: 'auto'}}>
       	  	<h5>どちらが良いか選択してください</h5>
         		<SwipeableViews index={slideIndex} disabled={true}>          		
-                  <div>{this.Question_text(0)}  	</div>
-                  <div>{this.Question_text(1)}    	</div>
-                  <div>{this.Question_text(2)} 		</div>
-                  <div>{this.Question_text(3)} 		</div>
-                  <div>{this.Question_text(4)} 		</div>
-                  <div>{this.Question_text(5)} 		</div>
-                  <div>{this.Question_text(6)} 		</div>
-                  <div>{this.wait()} 				</div>
-                  <div>{this.Question_text(7)} 		</div>
-                  <div>{this.Question_text(8)} 		</div>
-                  <div>{this.Question_text(9)} 		</div>
-                  <div>{this.Question_text(10)} 	</div>
-                  <div>{this.Question_text(11)} 	</div>
-                  <div>{this.Question_text(12)} 	</div>
-                  <div>{this.Question_text(13)} 	</div>
-                  <div>{this.wait()} 				</div>
-                  <div>{this.Question_text(14)} 	</div>
-                  <div>{this.Question_text(15)} 	</div>
-                  <div>{this.Question_text(16)} 	</div>
-                  <div>{this.Question_text(17)} 	</div>
-                  <div>{this.Question_text(18)} 	</div>
-                  <div>{this.Question_text(19)} 	</div>
-                  <div>{this.Question_text(20)}		</div>
-                  <div>{this.finish()} 				</div>
+                  {questionlist}
         		</SwipeableViews>
       		</div>
       	</div>

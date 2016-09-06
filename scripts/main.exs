@@ -14,13 +14,14 @@ defmodule TimeRate.Main do
       anses: 0,
       money: 7500,
       unit: "円",
+      results: %{},
     }
   end
 
   def new_participant(data) do
     %{
       ansed: false,
-      rate: [[0.8,1.4,2],[0.8,1.4,2],[0.8,1.4,2]], #rate[0] -> 1month,rate[1] -> 6month,rate[2] -> 1year
+      rate: [[80,140,200],[80,140,200],[80,140,200]], #rate[0] -> 1month,rate[1] -> 6month,rate[2] -> 1year
       question: [0,0,0,0,0,0,0,1,1,1,1,1,1,1,2,2,2,2,2,2,2],
       state: 0, # 0->waitng,1->answering,2->answered
       slideIndex: 0,

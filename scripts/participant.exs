@@ -13,6 +13,15 @@ defmodule TimeRate.Participant do
     Actions.set_question(data,id,question)
   end
 
+  def send_result(data) do
+    results = %{
+      participants: data.participants
+    }
+    data = data
+           |>put_in([:results],results)
+    Actions.send_result(data)
+  end
+
   def next(data,id,rate) do
     slideIndex = get_in(data,[:participants,id,:slideIndex])
     slideIndex = slideIndex + 1
@@ -25,6 +34,7 @@ defmodule TimeRate.Participant do
   def finish(data,id) do
     data = data
            |>put_in([:participants,id,:state],2)
+           |>put_in([:anses],data.anses+1)
     Actions.finish(data,id)
   end
 
@@ -37,7 +47,8 @@ defmodule TimeRate.Participant do
       money: data.money,
       unit: data.unit,
       anses: data.anses,
-      actives: Map.size(data.participants)
+      actives: Map.size(data.participants),
+      results: data.results
     }
   end
 

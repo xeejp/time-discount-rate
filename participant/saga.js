@@ -1,6 +1,6 @@
 import { put, take, call, select, fork } from 'redux-saga/effects'
 
-import { fetchContents, Start, next} from './actions'
+import { fetchContents, Start, next, ToResult} from './actions'
 
 function* fetchContentsSaga() {
   while (true) {
@@ -26,6 +26,13 @@ function* startSaga(){
   }
 }
 
+function* resultSaga(){
+  while(true){
+    const { payload } = yield take(`${ToResult}`)
+    yield call(sendData, 'send result')
+  }
+}
+
 function* nextSaga(){
   while(true){
     const { payload:{choice,type,rate} } = yield take(`${next}`)
@@ -36,12 +43,14 @@ function* nextSaga(){
       case 1:
       case 2:
         let next_rate = rate.concat()
+        let prev_rate = next_rate[type][1]
         if(choice == 1){
           next_rate[type][0] = next_rate[type][1]
         }else {
           next_rate[type][2] = next_rate[type][1]
         }
-        next_rate[type][1] = (next_rate[type][2]-next_rate[type][0])*Math.random()+next_rate[type][0]
+        next_rate[type][1] = Math.round((next_rate[type][2]-next_rate[type][0])*Math.random()+next_rate[type][0])
+        if(prev_rate == next_rate[type][1]) next_rate[type][1] += 0.5 
         yield call(sendData, 'next',next_rate)
         break;
       case 4:
@@ -58,6 +67,7 @@ function* saga() {
   yield fork(fetchContentsSaga)
   yield fork(startSaga)
   yield fork(nextSaga)
+  yield fork(resultSaga)
 }
 
 export default saga

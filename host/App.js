@@ -3,11 +3,11 @@ import { connect } from 'react-redux'
 
 import { fetchContents } from './actions'
 
+import Divider from 'material-ui/Divider'
 import PageButtons from './PageButtons'
-import Information from './Information'
 import Users from './Users'
-
-import Chart from 'components/Chart'
+import Result from './Result'
+import Config from './Config'
 
 const mapStateToProps = ({loading, page}) => ({
   loading, page
@@ -32,8 +32,15 @@ class App extends Component {
       return (
         <div>
           <PageButtons />
-          <Information />
-          <Users />
+          <Divider
+              style={{
+                marginTop: '5%',
+                marginBottom: '5%'
+             }}
+          />
+          <Users /><br/>
+          <Result /><br/>
+          <Config />
         </div>
       )
     }

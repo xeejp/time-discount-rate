@@ -7,6 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import SwipeableViews from 'react-swipeable-views'
 import Question from './Question'
 import { Start } from './actions'
+import Result from './Result'
 
 const mapStateToProps = ({ money,unit,ansed,question,state}) => ({
   money,unit,ansed,question,state
@@ -40,7 +41,7 @@ class Experiment extends Component {
     case 1:
       return (<Question />)
 		case 2:
-			return (<span></span>)
+			return (<div> <p>結果画面</p>{<Result />}</div>)
     }
   }
 }

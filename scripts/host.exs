@@ -19,13 +19,23 @@ defmodule TimeRate.Host do
     end
   end
 
+  def updata_config(data,options) do
+    Logger.debug("[Time Rate] #{options["money"]}")
+    money = options["money"]
+    unit = options["unit"]
+    data = data 
+           |> put_in([:money],money)
+           |> put_in([:unit],unit)
+    data |> Actions.updata_option()
+  end
+
   def all_reset(data) do
     
     data = data |> Map.put(:participants, Enum.into(Enum.map(data.participants, fn { id, _ } ->
       {id,
         %{
           ansed: false,
-          rate: [[0.8,1.4,2],[0.8,1.4,2],[0.8,1.4,2]],
+          rate: [[80,140,200],[80,140,200],[80,140,200]],
           question: [0,0,0,0,0,0,0,1,1,1,1,1,1,1,2,2,2,2,2,2,2],
           state: 0, 
           slideIndex: 0,
@@ -34,6 +44,7 @@ defmodule TimeRate.Host do
     end), %{}))
     data = data
            |>put_in([:anses],0)
+           |>put_in([:results],%{})
     Actions.all_reset(data)
   end
 

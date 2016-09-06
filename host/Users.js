@@ -18,7 +18,15 @@ const UsersList = ({participants, page }) => (
           <User
             key={id}
             id={id}
-            status={"aaa"}
+            status={
+              (participants[id].state == 0)
+              ?"待機中"
+              :(participants[id].state == 1)
+              ?"回答中"
+              :(participants[id].state == 2)
+              ?"回答済み"
+              :"-"
+            }
           />
         ))
       }
@@ -30,7 +38,7 @@ const Users = ({ participants, page }) => (
   <div>
     <Card>
       <CardHeader
-        title={"Users (" + Object.keys(participants).length + "人)"}
+        title={"登録者 " + Object.keys(participants).length + "人"}
         actAsExpander={true}
         showExpandableButton={true}
       />

@@ -18,6 +18,12 @@ defmodule TimeRate.Actions do
     format(data, host)
   end
 
+  def updata_option(data) do
+    host = get_action("update contents", Host.format_contents(data))
+    action = get_action("updata config", %{money_data: data.money,unit_data: data.unit})
+    format(data, host, dispatch_to_all(data, action))
+  end
+
   def all_reset(data) do
     host = get_action("update contents", Host.format_contents(data))
     action = get_action("reset", %{})
@@ -38,6 +44,12 @@ defmodule TimeRate.Actions do
   def finish(data,id) do
     participant = get_action("to_result", %{})
     format(data,nil,dispatch_to(id,participant))
+  end
+
+  def send_result(data) do
+    host = get_action("update contents", Host.format_contents(data))
+    action = get_action("send result", data.results)
+    format(data,host,dispatch_to_all(data,action))
   end
 
   def update_participant_contents(data, id) do

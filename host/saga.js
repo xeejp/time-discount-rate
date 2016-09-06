@@ -1,6 +1,6 @@
 import { put, take, call, select, fork } from 'redux-saga/effects'
 
-import { fetchContents, match, nextPage, submitPage, changePage } from './actions'
+import { fetchContents, nextPage, submitPage, changePage, backPage,upadateConfig } from './actions'
 
 function* changePageSaga() {
   while (true) {
@@ -10,6 +10,22 @@ function* changePageSaga() {
       yield call(sendData,'all reset')
     }
     yield put(changePage(payload))
+  }
+}
+
+function* backPageSaga() {
+  const pages = ["experiment", "result", "waiting"]
+  while (true) {
+    yield take(`${backPage}`)
+    const page = yield select(({ page }) => page)
+    let next = pages[pages.length - 1]
+    for (let i = pages.length - 1; i >= 0; i --) {
+      if (page == pages[i]) {
+        next = pages[(pages.length - 1 + i) % pages.length]
+        break
+      }
+    }
+    yield put(submitPage(next))
   }
 }
 
@@ -29,6 +45,13 @@ function* nextPageSaga() {
   }
 }
 
+function* updataConfigSaga() {
+  while (true) {
+    const { payload } = yield take(`${upadateConfig}`)
+    yield call(sendData, 'updata config', payload)
+  }
+}
+
 function* fetchContentsSaga() {
   while (true) {
     yield take(`${fetchContents}`)
@@ -38,7 +61,9 @@ function* fetchContentsSaga() {
 
 function* saga() {
   yield fork(changePageSaga)
+  yield fork(backPageSaga)
   yield fork(nextPageSaga)
+  yield fork(updataConfigSaga)
   yield fork(fetchContentsSaga)
 }
 

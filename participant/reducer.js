@@ -12,9 +12,16 @@ const reducer = concatenateReducers([
       { 
         anses: 0,
         ansed: false,
-        rate: [[0.8,1.4,2],[0.8,1.4,2],[0.8,1.4,2]],
+        rate: [[80,140,200],[80,140,200],[80,140,200]],
         state: 0,
-        slideIndex: 0
+        slideIndex: 0,
+        result: {participants: {}}
+      }
+    ),
+    'updata config': (_, {payload:{ money_data,unit_data}}) => (
+      {
+        money: money_data,
+        unit: unit_data
       }
     ),
     'set question': (_, { payload }) => (
@@ -32,6 +39,11 @@ const reducer = concatenateReducers([
     'to_result': (_, { payload }) => (
       {
         state: 2
+      }
+    ),
+    'send result': (_, { payload }) => (
+      {
+        results: payload
       }
     )
   }),

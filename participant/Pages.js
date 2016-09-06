@@ -16,7 +16,7 @@ const Pages = ({ page }) => (() => {
     case "experiment":
       return <Experiment />
     case "result":
-      return <div> <p>結果画面</p>{/*<Result />*/}</div>
+      return <div> <p>結果画面</p>{<Result />}</div>
     default:
       return <span></span>
   }

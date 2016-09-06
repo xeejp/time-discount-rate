@@ -31,11 +31,12 @@ defmodule TimeRate do
 
   # Host router
   def handle_received(data, %{"action" => action, "params" => params}) do
-    Logger.debug("[Time Rate] #{action} #{params}")
+    Logger.debug("[Time Rate] #{action}")
     result = case {action, params} do
       {"fetch contents", _} -> Host.fetch_contents(data)
       {"change page", page} -> Host.change_page(data, page)
       {"all reset", _}      -> Host.all_reset(data)
+      {"updata config", options}  -> Host.updata_config(data,options)
       _ -> {:ok, %{"data" => data}}
     end
     wrap_result(result)
@@ -49,6 +50,7 @@ defmodule TimeRate do
       {"set question", question} -> Participant.set_question(data,id,question)
       {"next", rate} -> Participant.next(data,id,rate)
       {"finish", _} -> Participant.finish(data,id)
+      {"send result", _} -> Participant.send_result(data)
       _ -> {:ok, %{"data" => data}}
     end
     wrap_result(result)

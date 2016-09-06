@@ -4,6 +4,7 @@
   "dependencies": {
     "babel-polyfill": "^6.8.0",
     "combine-section-reducers": "^1.0.4",
+    "highcharts-more": "^0.1.2",
     "material-ui": "^0.15.3",
     "react": "^15.0.2",
     "react-dom": "^15.0.1",
