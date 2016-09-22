@@ -80,7 +80,7 @@ class Question extends Component  {
           setTimeout(this.next.bind(this, {choice:1 ,type: 3, rate: rate}),10000)
           this.only = false
       }
-      return(<div>
+      return(<div style={{margin: "5%"}}>
       <p>しばらくお待ちください</p>
       <br/><br/><br/>
       <LinearProgress mode="indeterminate" />
@@ -90,7 +90,7 @@ class Question extends Component  {
 
   finish(){
 	  const {rate} = this.props
-      return(<div>
+      return(<div style={{margin: "5%"}}>
       <p>これで実験は終了です</p>
       <RaisedButton onClick={this.next.bind(this, {choice:1 ,type: 4, rate: rate})}>結果へ</RaisedButton>
       </div>

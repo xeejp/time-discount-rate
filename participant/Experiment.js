@@ -39,7 +39,7 @@ class Experiment extends Component {
 				</Card>
 			)
     case 1:
-      return (<Question />)
+      return (<Card><CardText><Question /></CardText></Card>)
 		case 2:
 			return (<div> <p>結果画面</p>{<Result />}</div>)
     }
