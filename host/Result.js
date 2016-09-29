@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import throttle from 'react-throttle-render'
 
 import Chart2 from 'components/Chart2'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
@@ -25,4 +26,4 @@ const Result = ({ results }) => (
   </div>
 )
 
-export default connect(mapStateToProps)(Result)
+export default connect(mapStateToProps)(throttle(Result, 50))

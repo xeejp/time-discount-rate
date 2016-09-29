@@ -1,5 +1,6 @@
 ﻿import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import throttle from 'react-throttle-render'
 
 import Chart1 from 'components/Chart1'
 import Chart2 from 'components/Chart2'
@@ -26,7 +27,6 @@ const Result = ({ results,rate,state}) => (
         }
       </CardText>
     </Card>
-    
     <br/>
 
     <Card>
@@ -45,4 +45,4 @@ const Result = ({ results,rate,state}) => (
   </div>
 )
 
-export default connect(mapStateToProps)(Result)
+export default connect(mapStateToProps)(throttle(Result, 50))
