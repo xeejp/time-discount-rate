@@ -53,4 +53,4 @@ const Users = ({ participants, page }) => (
   </div>
 )
 
-export default connect(mapStateToProps)(throttle(Users, 50))
+export default connect(mapStateToProps)(throttle(Users, 200))

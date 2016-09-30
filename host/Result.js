@@ -26,4 +26,4 @@ const Result = ({ results }) => (
   </div>
 )
 
-export default connect(mapStateToProps)(throttle(Result, 50))
+export default connect(mapStateToProps)(throttle(Result, 200))

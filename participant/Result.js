@@ -45,4 +45,4 @@ const Result = ({ results,rate,state}) => (
   </div>
 )
 
-export default connect(mapStateToProps)(throttle(Result, 50))
+export default connect(mapStateToProps)(throttle(Result, 200))
