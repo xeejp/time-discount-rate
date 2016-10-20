@@ -1,5 +1,5 @@
-defmodule TimeRate.Participant do
-  alias TimeRate.Actions
+defmodule TimeDiscountRate.Participant do
+  alias TimeDiscountRate.Actions
 
   # Actions
   def fetch_contents(data, id) do

@@ -1,5 +1,5 @@
-defmodule TimeRate.Main do
-  alias TimeRate.Actions
+defmodule TimeDiscountRate.Main do
+  alias TimeDiscountRate.Actions
 
   @pages ["waiting", "experiment", "result"]
   @sequence ["question1", "question2", "answered"]

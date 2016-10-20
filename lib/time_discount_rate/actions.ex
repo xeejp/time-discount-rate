@@ -1,6 +1,6 @@
-defmodule TimeRate.Actions do
-  alias TimeRate.Participant
-  alias TimeRate.Host
+defmodule TimeDiscountRate.Actions do
+  alias TimeDiscountRate.Participant
+  alias TimeDiscountRate.Host
 
   def change_page(data, page) do
     action = get_action("change page", page)

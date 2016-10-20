@@ -1,7 +1,7 @@
-defmodule TimeRate.Mixfile do 
+defmodule TimeDiscountRate.Mixfile do 
   use Mix.Project 
   def project do 
-    [app: :time_discount_rate, 
+    [app: :xee_time_discount_rate, 
      version: "0.1.0", 
      build_path: "../../_build", 
      config_path: "../../config/config.exs", 

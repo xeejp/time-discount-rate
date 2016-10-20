@@ -1,6 +1,6 @@
-defmodule TimeRate.Host do
-  alias TimeRate.Main
-  alias TimeRate.Actions
+defmodule TimeDiscountRate.Host do
+  alias TimeDiscountRate.Main
+  alias TimeDiscountRate.Actions
 
   require Logger
 

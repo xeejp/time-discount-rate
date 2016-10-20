@@ -1,9 +1,9 @@
-defmodule TimeRate do 
+defmodule TimeDiscountRate do 
   use XeeThemeScript 
   require Logger 
-  alias TimeRate.Main 
-  alias TimeRate.Host 
-  alias TimeRate.Participant 
+  alias TimeDiscountRate.Main 
+  alias TimeDiscountRate.Host 
+  alias TimeDiscountRate.Participant 
   # Callbacks 
   def script_type do 
     :message 
