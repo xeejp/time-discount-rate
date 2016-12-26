@@ -6,11 +6,11 @@ import Chart1 from 'components/Chart1'
 import Chart2 from 'components/Chart2'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 
-const mapStateToProps = ({results,rate,state}) => ({
-  results,rate,state
+const mapStateToProps = ({results,rate,history,uplim,lowlim,state,basetime}) => ({
+  results,rate,history,uplim,lowlim,state,basetime
 })
 
-const Result = ({ results,rate,state}) => (
+const Result = ({ results,rate,history,uplim,lowlim,state,basetime}) => (
   <div>
     <Card>
       <CardHeader
@@ -22,6 +22,10 @@ const Result = ({ results,rate,state}) => (
         {(state == 2)?
          <Chart1
            rate = {rate}
+           history = {history}
+           uplim = {uplim}
+           lowlim = {lowlim}
+           basetime = {basetime}
          />
         : <p> 実験を終えられなかったので個人用の結果は表示できません</p>
         }
@@ -38,6 +42,9 @@ const Result = ({ results,rate,state}) => (
       <CardText expandable={true}>
         <Chart2
           participants = {results.participants}
+           uplim = {uplim}
+           lowlim = {lowlim}
+           basetime = {basetime}
         />
       </CardText>
     </Card>

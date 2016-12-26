@@ -5,11 +5,11 @@ import throttle from 'react-throttle-render'
 import Chart2 from 'components/Chart2'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 
-const mapStateToProps = ({results}) => ({
-  results
+const mapStateToProps = ({results,basetime,uplim,lowlim}) => ({
+  results,basetime,uplim,lowlim
 })
 
-const Result = ({ results }) => (
+const Result = ({ results,basetime,uplim,lowlim }) => (
   <div>
     <Card>
       <CardHeader
@@ -20,6 +20,9 @@ const Result = ({ results }) => (
       <CardText expandable={true}>
         <Chart2
           participants = {results.participants}
+           uplim = {uplim}
+           lowlim = {lowlim}
+           basetime = {basetime}
         />
       </CardText>
     </Card>

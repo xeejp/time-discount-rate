@@ -7,8 +7,8 @@ import SwipeableViews from 'react-swipeable-views'
 import LinearProgress from 'material-ui/LinearProgress'
 import { next } from './actions'
 
-const mapStateToProps = ({ money,unit,ansed,question,slideIndex,rate}) => ({
-  money,unit,ansed,question,slideIndex,rate
+const mapStateToProps = ({ money, unit, basetime, rest_interval, rest_time ,distance, ansed, question, slideIndex, rate}) => ({
+  money, unit, basetime, rest_interval, rest_time, distance, ansed, question, slideIndex, rate
 })
 
 class Question extends Component  {
@@ -24,50 +24,25 @@ class Question extends Component  {
   }
 
   Question_text(index){
-	  const { money,unit,question,rate} = this.props
+	  const { money, unit, basetime, distance, question, rate} = this.props
 	  const type = question[index]
-  return (
+      let basemoney = money;
+      let nextmoney = money*Math.pow(rate[type][1]/100,distance);
+      basemoney = Math.round(basemoney/100)*100
+      nextmoney = Math.round(nextmoney/100)*100
+      return (
   <span>
    <RaisedButton onClick={this.next.bind(this, {choice: 1 ,type: type, rate: rate} )} style={{float:  'left', width: '40%', height: '300px', position: 'relative', margin: '5%'}}>
     <div style={{position: 'absolute', top: '40%', left: '50%', width: '100%', margin: '-1.5em 0 0 -50%'}}>
         {(() => {
-            let str = ""                    
-            switch(type){
-                case 0:
-                    str = "一ヶ月後に"
-                    break
-                case 1:
-                    str = "半年後に"
-                    break;
-                case 2:
-                    str = "一年後に"
-                    break;
-                default:
-                    return <span></span>
-            }
-            return (<p>{str}<br/>{money.toLocaleString()+unit}<br/>を受け取る</p>)                        
+            return (<p>{(basetime[type]==0)?"今日、":(basetime[type]==1)?"明日、":basetime[type] + "日後に"}<br/>{basemoney.toLocaleString() + unit}<br/>を受け取る</p>)                        
         })()}
      </div>
    </RaisedButton>
    <RaisedButton onClick={this.next.bind(this, {choice:2 ,type: type, rate: rate} )} style={{float: 'right', width: '40%', height: '300px', position: 'relative', margin: '5%'}} labelStyle={{position: 'absolute', top: '50%', left: '50%', width: '100%', margin: '-1.5em 0 0 -50%'}}>
      <div style={{position: 'absolute', top: '40%', left: '50%', width: '100%', margin: '-1.5em 0 0 -50%'}}>
         {(() => {
-            let str = ""                   
-            switch(type){
-                case 0:
-                    str = "一ヶ月と一週間後に"
-                    break;
-                case 1:
-                    str = "半年と一週間後に"
-                    break;
-                case 2:
-                    str = "一年と一週間後に"
-                    break;
-                default:
-                    str = ""
-                    break;
-            }
-            return (<p>{str}<br/>{Math.round(money * rate[type][1]/100).toLocaleString() + unit}<br/>を受け取る</p>)                        
+            return (<p>{(basetime[type]==0)?"明日、":(basetime[type] + distance) + "日後に"}<br/>{nextmoney.toLocaleString() + unit}<br/>を受け取る</p>)                        
         })()}
      </div>
    </RaisedButton>
@@ -75,9 +50,9 @@ class Question extends Component  {
   }
 
   wait(){
-	  const {rate,slideIndex} = this.props
-      if(this.only && (slideIndex == 7 || slideIndex == 15)){
-          setTimeout(this.next.bind(this, {choice:1 ,type: 3, rate: rate}),10000)
+	  const {rate, rest_time, question, rest_interval, slideIndex} = this.props
+      if(this.only && slideIndex%(rest_interval+1) == rest_interval && slideIndex != question.length +Math.floor((question.length-1)/rest_interval)){
+          setTimeout(this.next.bind(this, {choice:1 ,type: -1, rate: rate}),rest_time * 1000)
           this.only = false
       }
       return(<div style={{margin: "5%"}}>
@@ -92,21 +67,23 @@ class Question extends Component  {
 	  const {rate} = this.props
       return(<div style={{margin: "5%"}}>
       <p>これで実験は終了です</p>
-      <RaisedButton onClick={this.next.bind(this, {choice:1 ,type: 4, rate: rate})}>結果へ</RaisedButton>
+      <RaisedButton onClick={this.next.bind(this, {choice:1 ,type: -2, rate: rate})}>結果へ</RaisedButton>
       </div>
       )
   }
 
   render(){
-    const { money,unit,ansed,question,slideIndex} = this.props
+    const { money, unit, rest_interval, ansed, question, slideIndex} = this.props
     var Questions = question.concat()
     var index
     console.log(question)
+    const list_size = question.length
     var questionlist = []
-    var t= 0
-    for(var i = 0; i < 3; i++){
-        for(var j = 0; j < 7 ; j++){
-            questionlist[t++] = <div key = {t}>{this.Question_text(7*i+j)}</div>
+    var t= 0,s = 0
+    console.log(this.props)
+    while(s < list_size){
+        for(var j = 0; j < rest_interval && s < list_size ; j++){
+            questionlist[t++] = <div key = {t}>{this.Question_text(s++)}</div>
         }
         questionlist[t++] = <div key = {t}>{this.wait()}</div>
     }

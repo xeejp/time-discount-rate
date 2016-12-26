@@ -8,25 +8,10 @@ const reducer = concatenateReducers([
     'update contents': (_, { payload }) => payload,
     'change page': (_, { payload }) => ({ page: payload }),
     'joined': (_, { payload }) => ({ actives: payload }),
-    'reset': (_, { payload }) => ( 
-      { 
-        anses: 0,
-        ansed: false,
-        rate: [[80,140,200],[80,140,200],[80,140,200]],
-        state: 0,
-        slideIndex: 0,
-        result: {participants: {}}
-      }
-    ),
-    'updata config': (_, {payload:{ money_data,unit_data}}) => (
+    'set_ex': (_, { payload:{question_data,rate_data} }) => (
       {
-        money: money_data,
-        unit: unit_data
-      }
-    ),
-    'set question': (_, { payload }) => (
-      {
-        question: payload,
+        question: question_data,
+        rate: rate_data,
         state: 1,
       }
     ),

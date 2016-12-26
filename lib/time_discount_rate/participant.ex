@@ -1,16 +1,18 @@
 defmodule TimeDiscountRate.Participant do
   alias TimeDiscountRate.Actions
-
+  require Logger 
   # Actions
   def fetch_contents(data, id) do
     Actions.update_participant_contents(data, id)
   end
 
-  def set_question(data,id,question) do
+  def set(data,id,option) do
     data = data
-           |>put_in([:participants,id,:question],question)
+           |>put_in([:participants,id,:question],option["question"])
+           |>put_in([:participants,id,:rate],option["rate"])
+           |>put_in([:participants,id,:history],option["history"])
            |>put_in([:participants,id,:state],1)
-    Actions.set_question(data,id,question)
+    Actions.set(data,id,option["question"],option["rate"])
   end
 
   def send_result(data) do
@@ -22,13 +24,14 @@ defmodule TimeDiscountRate.Participant do
     Actions.send_result(data)
   end
 
-  def next(data,id,rate) do
+  def next(data,id,next_data) do
     slideIndex = get_in(data,[:participants,id,:slideIndex])
     slideIndex = slideIndex + 1
     data = data
            |>put_in([:participants,id,:slideIndex],slideIndex)
-           |>put_in([:participants,id,:rate],rate)
-    Actions.next(data,id,slideIndex,rate)
+           |>put_in([:participants,id,:rate],next_data["next_rate"])
+           |>put_in([:participants,id,:history],next_data["history"])
+    Actions.update_participant_contents(data,id)
   end
 
   def finish(data,id) do
@@ -45,6 +48,13 @@ defmodule TimeDiscountRate.Participant do
     %{
       page: data.page,
       money: data.money,
+      basetime: data.basetime,
+      q_num: data.q_num,
+      rest_interval: data.rest_interval,
+      rest_time: data.rest_time,
+      uplim: data.uplim,
+      lowlim: data.lowlim,
+      distance: data.distance,
       unit: data.unit,
       anses: data.anses,
       actives: Map.size(data.participants),

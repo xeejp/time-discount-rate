@@ -12,6 +12,13 @@ defmodule TimeDiscountRate.Main do
       page: "waiting",
       participants: %{},
       anses: 0,
+      basetime: [0,7,14,10],
+      q_num: 3,
+      rest_interval: 4,
+      rest_time: 3,
+      distance: 1,
+      uplim: 150,
+      lowlim: 80,
       money: 7500,
       unit: "円",
       results: %{},
@@ -21,8 +28,9 @@ defmodule TimeDiscountRate.Main do
   def new_participant(data) do
     %{
       ansed: false,
-      rate: [[80,140,200],[80,140,200],[80,140,200]], #rate[0] -> 1month,rate[1] -> 6month,rate[2] -> 1year
-      question: [0,0,0,0,0,0,0,1,1,1,1,1,1,1,2,2,2,2,2,2,2],
+      rate: [],
+      history: [],
+      question: [],
       state: 0, # 0->waitng,1->answering,2->answered
       slideIndex: 0,
     }

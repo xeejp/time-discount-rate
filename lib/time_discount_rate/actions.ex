@@ -1,6 +1,7 @@
 defmodule TimeDiscountRate.Actions do
   alias TimeDiscountRate.Participant
   alias TimeDiscountRate.Host
+  alias TimeDiscountRate.Main
 
   def change_page(data, page) do
     action = get_action("change page", page)
@@ -20,20 +21,20 @@ defmodule TimeDiscountRate.Actions do
 
   def updata_option(data) do
     host = get_action("update contents", Host.format_contents(data))
-    action = get_action("updata config", %{money_data: data.money,unit_data: data.unit})
+    action = get_action("update contents", Map.merge(Main.new_participant(data),Participant.format_data(data)))
     format(data, host, dispatch_to_all(data, action))
   end
 
   def all_reset(data) do
     host = get_action("update contents", Host.format_contents(data))
-    action = get_action("reset", %{})
+    action = get_action("update contents", Map.merge(Main.new_participant(data),Participant.format_data(data)))
     format(data, host, dispatch_to_all(data, action))
   end
 
-  def set_question(data,id,question) do
-    participant = get_action("set question", question)
+  def set(data,id,question,rate) do
+    participant = dispatch_to(id, get_action("update contents", Participant.format_contents(data, id)))
     host = get_action("start", %{id: id})
-    format(data,host,dispatch_to(id,participant))
+    format(data,host,participant)
   end
 
   def next(data,id,slideIndex,rate) do

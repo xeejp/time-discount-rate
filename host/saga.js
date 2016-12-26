@@ -47,8 +47,8 @@ function* nextPageSaga() {
 
 function* updataConfigSaga() {
   while (true) {
-    const { payload } = yield take(`${upadateConfig}`)
-    yield call(sendData, 'updata config', payload)
+    const { payload :{ options } } = yield take(`${upadateConfig}`)
+    yield call(sendData, 'updata config', options)
   }
 }
 

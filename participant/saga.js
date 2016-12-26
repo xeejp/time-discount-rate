@@ -12,7 +12,15 @@ function* fetchContentsSaga() {
 function* startSaga(){
   while(true){
     yield take(`${Start}`)
-    let q = [0,0,0,0,0,0,0,1,1,1,1,1,1,1,2,2,2,2,2,2,2]
+    const { basetime, q_num, uplim, lowlim} = yield select()
+    let q = []
+    {
+      for(let i = 0; i < basetime.length ; i++){
+        for(let j = 0;j < q_num ; j++){
+          q.push(i)
+        }
+      }
+    }
     {
       let i = q.length
       while(i){
@@ -22,7 +30,17 @@ function* startSaga(){
         q[j] = t
       }
     }
-    yield call(sendData, 'set question',q)
+    let r = [];
+    let h = [];
+    {
+      for(let i = 0; i < basetime.length ; i++){
+        const rate = [lowlim,(uplim-lowlim)*Math.random()+lowlim,uplim] //init_rate
+        r.push(rate);
+        h.push([rate[1]])
+      }
+    }
+
+    yield call(sendData, 'set', {question:q,rate:r,history:h})
   }
 }
 
@@ -36,12 +54,11 @@ function* resultSaga(){
 function* nextSaga(){
   while(true){
     const { payload:{choice,type,rate} } = yield take(`${next}`)
+    let { history } = yield select()
     console.log(choice)
     console.log(type)
     switch(type){
-      case 0:
-      case 1:
-      case 2:
+      default:
         let next_rate = rate.concat()
         let prev_rate = next_rate[type][1]
         if(choice == 1){
@@ -49,15 +66,16 @@ function* nextSaga(){
         }else {
           next_rate[type][2] = next_rate[type][1]
         }
-        next_rate[type][1] = Math.round((next_rate[type][2]-next_rate[type][0])*Math.random()+next_rate[type][0])
-        if(prev_rate == next_rate[type][1]) next_rate[type][1] += 0.5 
-        yield call(sendData, 'next',next_rate)
+        next_rate[type][1] = (next_rate[type][2]-next_rate[type][0])*Math.random()+next_rate[type][0]
+        //next_rate
+        history[type].push(next_rate[type][1])
+        yield call(sendData, 'next',{ next_rate:next_rate, history:history})
         break;
-      case 4:
+      case -2:
         yield call(sendData, 'finish')
         break
-      default:
-        yield call(sendData, 'next',rate)
+      case -1:
+        yield call(sendData, 'next',{ next_rate:rate, history:history})
         break
   }
   }

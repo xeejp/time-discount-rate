@@ -4,39 +4,18 @@ import ReactHighcharts from 'react-highcharts'
 import HighchartsMore from 'highcharts-more'
 HighchartsMore(ReactHighcharts.Highcharts)
 
-const Chart2 = ({participants}) => {
- var data1 = [],data2 = [],data3 =[],i=0
+const Chart2 = ({participants,basetime,uplim,lowlim}) => {
+    return (<span></span>);
+ var data1 = [],i=0
 	for (var key in participants){
 	  if(participants[key].state == 2) {
       const rate = participants[key].rate
-      data1[i] = (rate[0][0]+rate[0][2])/2-100
-      data2[i] = (rate[1][0]+rate[1][2])/2-100
-      data3[i] = (rate[2][0]+rate[2][2])/2-100
-      i++
+        data1 = rate.map((value) => ((value[0]+value[2])/2))
+        i++
 	  }
   }
   if(i == 0) return (<p>実験を終えてる人がいません</p>)
-  data1.sort(
-        function(a,b){
-	        if( a < b ) return -1;
-            if( a > b ) return 1;
-            return 0;
-         }
-  )
-  data2.sort(
-        function(a,b){
-	        if( a < b ) return -1;
-            if( a > b ) return 1;
-            return 0;
-         }
-  )
-  data3.sort(
-        function(a,b){
-	        if( a < b ) return -1;
-            if( a > b ) return 1;
-            return 0;
-         }
-  )
+  data1 = data.map()
 var data
 const t = (i-1)/4
 if(t == Math.round(t)){
@@ -80,9 +59,12 @@ console.log(data)
             enabled: false
         },
         xAxis: {
-            categories: ['一ヵ月後','半年後','一年後'],
+            categories: basetime,
             title: {
                 text: '期間'
+            },
+            labels: {
+                format: '{value} 日後',
             }
         },
         yAxis: {

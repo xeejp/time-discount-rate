@@ -19,27 +19,25 @@ defmodule TimeDiscountRate.Host do
     end
   end
 
-  def updata_config(data,options) do
-    Logger.debug("[Time Rate] #{options["money"]}")
-    money = options["money"]
-    unit = options["unit"]
-    data = data 
-           |> put_in([:money],money)
-           |> put_in([:unit],unit)
+  def updata_config(data,options) do 
+    data = data
+            |> put_in([:basetime],options["basetime"])
+            |> put_in([:distance],options["distance"])
+            |> put_in([:lowlim],options["lowlim"])
+            |> put_in([:uplim],options["uplim"])
+            |> put_in([:q_num],options["q_num"])
+            |> put_in([:rest_interval],options["rest_interval"])
+            |> put_in([:rest_time],options["rest_time"])
+            |> put_in([:unit],options["unit"])
     data |> Actions.updata_option()
   end
 
   def all_reset(data) do
     
     data = data |> Map.put(:participants, Enum.into(Enum.map(data.participants, fn { id, _ } ->
-      {id,
-        %{
-          ansed: false,
-          rate: [[80,140,200],[80,140,200],[80,140,200]],
-          question: [0,0,0,0,0,0,0,1,1,1,1,1,1,1,2,2,2,2,2,2,2],
-          state: 0, 
-          slideIndex: 0,
-        }
+      {
+        id,
+        Main.new_participant(data),
       }
     end), %{}))
     data = data

@@ -34,8 +34,8 @@ defmodule TimeDiscountRate do
     Logger.debug("[Time Rate] #{action}") 
     result = case {action, params} do 
       {"fetch contents", _} -> Participant.fetch_contents(data, id) 
-      {"set question", question} -> Participant.set_question(data,id,question) 
-      {"next", rate} -> Participant.next(data,id,rate) 
+      {"set", options} -> Participant.set(data,id,options) 
+      {"next", next_data} -> Participant.next(data,id,next_data) 
       {"finish", _} -> Participant.finish(data,id) 
       {"send result", _} -> Participant.send_result(data) 
       _ -> {:ok, %{"data" => data}} 
