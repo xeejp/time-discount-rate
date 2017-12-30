@@ -5,41 +5,64 @@ import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import { Step, Stepper, StepButton } from 'material-ui/Stepper'
 
-import { submitPage, nextPage, backPage } from './actions'
+import { changePage } from './actions'
 
 import { getPage } from 'util/index'
 
 const pages = ["waiting", "experiment", "result"]
 
-const mapStateToProps = ({ page, participants }) => ({
-  page, participants
+const actionCreators = {
+  changePage,
+}
+
+const mapStateToProps = ({ page }) => ({
+  page
 })
 
 class PageButtons extends Component {
   changePage(page) {
-    const { dispatch } = this.props
-    dispatch(submitPage(page))
+    this.props.changePage(page)
   }
 
-  backPage(page) {
-    const { dispatch } = this.props
-    dispatch(backPage())
+  nextPage() {
+    const { page } = this.props
+    switch (page) {
+      case "waiting":
+        this.changePage("experiment")
+        break
+      case "experiment":
+        this.changePage("result")
+        break
+      case "result":
+        this.changePage("waiting")
+        break
+    }
   }
 
-  nextPage(page) {
-    const { dispatch } = this.props
-    dispatch(nextPage())
+  backPage() {
+    const { page } = this.props
+    switch (page) {
+      case "waiting":
+        this.changePage("result")
+        break
+      case "experiment":
+        this.changePage("waiting")
+        break
+      case "result":
+        this.changePage("experiment")
+        break
+    }
   }
 
   render() {
-    const { page, participants } = this.props
+    const { page } = this.props
     const buttons = []
     for (let i = 0; i < pages.length; i ++) {
       buttons[i] = (
         <Step key={i}>
-          <StepButton
-            onClick={this.changePage.bind(this, pages[i])}
-          >{getPage(pages[i])}</StepButton>
+          <StepButton onClick={this.changePage.bind(this, pages[i])}>
+            {getPage(pages[i])}
+          </StepButton>
         </Step>
       )
     }
@@ -48,11 +71,21 @@ class PageButtons extends Component {
         <Stepper activeStep={pages.indexOf(page)} linear={false}>
           {buttons}
         </Stepper>
-        <FlatButton onClick={this.backPage.bind(this)} disabled={page == "waiting"} style={{ marginLeft: '3%' }}>戻る</FlatButton>
-        <RaisedButton onClick={this.nextPage.bind(this)} primary={true} style={{ marginLeft: '3%' }}>次へ</RaisedButton>
+        <FlatButton
+          label={"戻る"}  
+          onClick={this.backPage.bind(this)}
+          disabled={page == "waiting"}
+          style={{ marginLeft: '3%' }}>
+        </FlatButton>
+        <RaisedButton
+          label={"次へ"}  
+          onClick={this.nextPage.bind(this)}
+          primary={true}
+          style={{ marginLeft: '3%' }}>
+        </RaisedButton>
       </span>
     )
   }
 }
 
-export default connect(mapStateToProps)(PageButtons)
+export default connect(mapStateToProps, actionCreators)(PageButtons)

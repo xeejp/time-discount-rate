@@ -1,9 +1,19 @@
 ﻿import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { fetchContents } from './actions'
+
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
+import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme'
+
+import { fetchContents } from 'shared/actions'
 
 import Pages from './Pages'
+
+const actionCreators = {
+  fetchContents
+}
 
 const mapStateToProps = ({ loading }) => ({
   loading
@@ -16,22 +26,20 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const { dispatch } = this.props
-    dispatch(fetchContents())
+    this.props.fetchContents()
   }
 
   render() {
     const { loading, active } = this.props
-    if (loading) {
-      return <p>ロード中です。</p>
-    } else {
+    
       return (
+        <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>        
         <div>
           <Pages />
         </div>
+        </MuiThemeProvider>
       )
     }
-  }
 }
 
-export default connect(mapStateToProps)(App)
+export default connect(mapStateToProps, actionCreators)(App)

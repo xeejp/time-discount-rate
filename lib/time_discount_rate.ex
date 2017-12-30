@@ -1,45 +1,53 @@
-defmodule TimeDiscountRate do 
-  use XeeThemeScript 
-  require Logger 
-  alias TimeDiscountRate.Main 
-  alias TimeDiscountRate.Host 
-  alias TimeDiscountRate.Participant 
-  # Callbacks 
-  def script_type do 
-    :message 
-  end 
-  def install, do: nil 
-  def init do 
-    {:ok, %{"data" => Main.init()}} 
-  end 
-  def wrap_result({:ok, _} = result), do: result 
-  def wrap_result(result), do: Main.wrap(result) 
-  def join(data, id) do 
-    wrap_result(Main.join(data, id)) 
-  end 
-  # Host router 
-  def handle_received(data, %{"action" => action, "params" => params}) do 
-    Logger.debug("[Time Rate] #{action}") 
-    result = case {action, params} do 
-      {"fetch contents", _} -> Host.fetch_contents(data) 
-      {"change page", page} -> Host.change_page(data, page) 
-      {"all reset", _}      -> Host.all_reset(data) 
-      {"updata config", options}  -> Host.updata_config(data,options) 
-      _ -> {:ok, %{"data" => data}} 
-    end 
-    wrap_result(result) 
-  end 
-  # Participant router 
-  def handle_received(data, %{"action" => action, "params" => params}, id) do 
-    Logger.debug("[Time Rate] #{action}") 
-    result = case {action, params} do 
-      {"fetch contents", _} -> Participant.fetch_contents(data, id) 
-      {"set", options} -> Participant.set(data,id,options) 
-      {"next", next_data} -> Participant.next(data,id,next_data) 
-      {"finish", _} -> Participant.finish(data,id) 
-      {"send result", _} -> Participant.send_result(data) 
-      _ -> {:ok, %{"data" => data}} 
-    end 
-    wrap_result(result) 
-  end 
-end 
+defmodule TimeDiscountRate do
+  use XeeThemeScript
+  require Logger
+  alias TimeDiscountRate.Main
+  alias TimeDiscountRate.Actions
+  alias TimeDiscountRate.Host
+  alias TimeDiscountRate.Participant
+
+  # Callbacks
+  def script_type do
+    :message
+  end
+  def install, do: nil
+  def init do
+    {:ok, %{data: Main.init()}}
+  end
+  def join(data, id) do
+    wrap_result(data, Main.join(data, id))
+  end
+
+  # Host router
+  def handle_received(data, %{"action" => action, "params" => params}) do
+    result = case {action, params} do
+      {"fetch contents", _} -> Actions.update_host_contents(data)
+      {"change page", page} -> Host.change_page(data, page)
+      {"update config", config} -> Host.update_config(data, config)
+      {"update description", description} -> Host.update_description(data, description)
+      {"visit", _} -> Host.visit(data)
+      _ -> {:ok, %{data: data}}
+    end
+    wrap_result(data, result)
+  end
+  # Participant router
+  def handle_received(data, %{"action" => action, "params" => params}, id) do
+    result = case {action, params} do
+      {"fetch contents", _} -> Actions.update_participant_contents(data, id)
+      {"start", option} -> Participant.start(data, id, option)
+      {"next", rate} -> Participant.next(data, id, rate)
+      {"finish", _} -> Participant.finish(data, id)
+      _ -> {:ok, %{data: data}}
+    end
+    wrap_result(data, result)
+  end
+
+  # Utilities
+  def wrap_result(old, {:ok, result}) do
+    {:ok, Main.compute_diff(old, result)}
+  end
+
+  def wrap_result(old, new) do
+    {:ok, Main.compute_diff(old, %{data: new})}
+  end
+end

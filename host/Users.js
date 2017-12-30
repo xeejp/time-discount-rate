@@ -1,14 +1,19 @@
 ﻿import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import throttle from 'react-throttle-render'
 
+import { openParticipantPage } from './actions'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 
 const User = ({ id, status }) => (
   <tr><td>{id}</td><td>{status}</td></tr>
 )
 
-const mapStateToProps = ({ participants, page }) => ({ participants, page })
+const mapStateToProps = ({ participants, page }) => ({
+  participants,
+  page
+})
 
 const UsersList = ({participants, page }) => (
   <table>
@@ -35,22 +40,39 @@ const UsersList = ({participants, page }) => (
   </table>
 )
 
-const Users = ({ participants, page }) => (
-  <div>
-    <Card>
-      <CardHeader
-        title={"登録者 " + Object.keys(participants).length + "人"}
-        actAsExpander={true}
-        showExpandableButton={true}
-      />
-      <CardText expandable={true}>
-        <UsersList
-          participants={participants}
-          page={page}
-        />
-      </CardText>
-    </Card>
-  </div>
-)
+const mapDispatchToProps = (dispatch) => {
+  const open = bindActionCreators(openParticipantPage, dispatch)
+  return {
+    openParticipantPage: (id) => () => open(id)
+  }
+}
 
-export default connect(mapStateToProps)(throttle(Users, 200))
+class Users extends Component {
+  constructor(props, context) {
+    super(props, context)
+    this.state = {}
+  }
+
+  render() {
+    const { participants, page } = this.props    
+    return (
+      <div>
+        <Card>
+          <CardHeader
+            title={"登録者 " + ((participants)? Object.keys(participants).length : "0") + "人"}
+            actAsExpander={true}
+            showExpandableButton={true}
+          />
+          <CardText expandable={true}>
+            <UsersList
+              participants={participants}
+              page={page}
+            />
+          </CardText>
+        </Card>
+      </div>
+    )
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(throttle(Users, 200))

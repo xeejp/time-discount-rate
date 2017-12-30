@@ -11,26 +11,42 @@ import SwipeableViews from 'react-swipeable-views'
 import {Tabs, Tab} from 'material-ui/Tabs'
 import SnackBar from 'material-ui/SnackBar'
 import Dialog from 'material-ui/Dialog'
-import { upadateConfig, fetchContents } from './actions'
 
-const mapStateToProps = ({ money, unit, basetime, distance, q_num, rest_interval, rest_time, uplim, lowlim, page }) => ({
-		money, unit, basetime, distance, q_num, rest_interval, rest_time, uplim, lowlim, page
+import { updateConfig, visit } from './actions'
+
+const actionCreators = {
+    updateConfig,
+    visit
+}
+
+const mapStateToProps = ({ money, unit, basetime, distance, q_num, rest_interval, rest_time, uplim, lowlim, page, isFirstVisit }) => ({
+	money,
+	unit,
+	basetime,
+	distance,
+	q_num,
+	rest_interval,
+	rest_time,
+	uplim,
+	lowlim,
+	page,
+	isFirstVisit
 })
 
 class Config extends Component {
-	constructor(props) {
-		super(props)
-		const {money, unit, basetime, distance, q_num, rest_interval, uplim, lowlim, rest_time} = this.props
+	constructor(props, context) {
+		super(props, context)
 		this.state = {
-			Basetime: basetime,
-			Q_num: q_num,
-			Rest_interval: rest_interval,
-			Rest_time: rest_time,
-			Distance: distance,
-			Uplim: uplim-100,
-			Lowlim: lowlim-100,
-			Money: money,
-			Unit: unit,
+			Basetime: [0,7,14,10],
+			Q_num: 3,
+			Rest_interval: 4,
+			Rest_time: 3,
+			Distance: 1,
+			Uplim: 150,
+			Lowlim: 80,
+			Money: 7500,
+			Unit: "円",
+
 			BasetimeValid: true,
 			Q_numValid: true,
 			Rest_intervalValid: true,
@@ -46,11 +62,14 @@ class Config extends Component {
 		}
 	}
 
-	handleOpen() {
-		const {dispatch, money, unit, basetime, distance, q_num, rest_interval, uplim, lowlim, rest_time} = this.props
-		dispatch(fetchContents())
-		this.setState({
-			Basetime: basetime,
+	componentWillReceiveProps(nextProps) {
+		const {money, unit, basetime, distance, q_num, rest_interval, uplim, lowlim, rest_time, isFirstVisit, visit} = nextProps
+        const open = isFirstVisit || this.state.open
+        if (isFirstVisit) {
+            visit()
+        }
+        this.setState({
+            Basetime: basetime,
 			Q_num: q_num,
 			Rest_interval: rest_interval,
 			Rest_time: rest_time,
@@ -59,15 +78,12 @@ class Config extends Component {
 			Lowlim: lowlim-100,
 			Money: money,
 			Unit: unit,
-			BasetimeValid: true,
-			Q_numValid: true,
-			Rest_intervalValid: true,
-			Rest_timeValid: true,
-			DistanceValid: true,
-			limValid: true,
-			MoneyValid: true,
-			UnitValid: true,
-			snack: false,
+			open: open			
+        })
+    }
+
+	handleOpen() {
+		this.setState({
 			slideIndex: 0,
 		 	open: true,
 		})
@@ -94,8 +110,7 @@ class Config extends Component {
 			snack: true,
 			message: "設定を初期化しました。"
 		})
-		const { dispatch } = this.props
-		dispatch(upadateConfig({options}))
+		this.props.updateConfig(config)
 	}
 
 	closeSnack() {
@@ -226,19 +241,24 @@ class Config extends Component {
 			open: false,
 			message: "設定を送信しました。"
 		})
-		dispatch(upadateConfig({
-			options : {
-				basetime: Basetime,
-				distance: Distance,
-				money: Money,
-				lowlim: Lowlim,
-				uplim: Uplim,
-				q_num: Q_num,
-				rest_interval: Rest_interval,
-				rest_time: Rest_time,
-				unit: Unit
-			}	
-		}))
+		let config = {
+			basetime: Basetime,
+			distance: Distance,
+			money: Money,
+			lowlim: Lowlim,
+			uplim: Uplim,
+			q_num: Q_num,
+			rest_interval: Rest_interval,
+			rest_time: Rest_time,
+			unit: Unit
+		}
+		Object.keys(config).forEach(
+			key => {
+			  if(config[key] === null || config[key] === undefined || config[key] === "" || (Number.isNaN(config[key]) && key!="Unit")) config[key] = this.props[key]
+			}
+		)
+		this.props.updateConfig(config)		
+		
 	}
 
 	deleteTime(index,event){
@@ -427,4 +447,4 @@ class Config extends Component {
 	}
 }
 
-export default connect(mapStateToProps)(Config)
+export default connect(mapStateToProps, actionCreators)(Config)

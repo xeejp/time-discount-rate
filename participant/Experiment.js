@@ -9,8 +9,20 @@ import Question from './Question'
 import { Start } from './actions'
 import Result from './Result'
 
-const mapStateToProps = ({ money,unit,ansed,question,state}) => ({
-  money,unit,ansed,question,state
+const actionCreators = {
+	Start
+}
+
+const mapStateToProps = ({ money, unit, ansed, question, state, basetime, q_num, uplim, lowlim}) => ({
+	money,
+	unit,
+	ansed,
+	question,
+	state,
+	basetime,
+	q_num,
+	uplim,
+	lowlim
 })
 
 class Experiment extends Component {
@@ -18,9 +30,34 @@ class Experiment extends Component {
     super(props)
   }
 
-	start(){
-		const { dispatch } = this.props
-		dispatch(Start())
+	start() {
+		const { basetime, q_num, uplim, lowlim} = this.props
+    let questions = []
+    {
+      for(let i = 0; i < basetime.length ; i++){
+        for(let j = 0;j < q_num ; j++){
+          questions.push(i)
+        }
+      }
+    }
+    {	
+      let i = questions.length
+      while(i){
+        let j = Math.floor(Math.random() * i)
+        let t = questions[--i]
+        questions[i] = questions[j]
+        questions[j] = t
+      }
+    }
+    let r = [];
+    {
+      for(let i = 0; i < basetime.length ; i++){
+        const rate = [lowlim,(uplim-lowlim)*Math.random()+lowlim,uplim] //init_rate
+        r.push(rate);
+      }
+    }
+    console.log(questions)
+		this.props.Start({questions:questions, rate:r})
 	}
   
   render() {
@@ -46,4 +83,4 @@ class Experiment extends Component {
   }
 }
 
-export default connect(mapStateToProps)(Experiment)
+export default connect(mapStateToProps, actionCreators)(Experiment)

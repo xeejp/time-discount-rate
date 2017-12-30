@@ -7,8 +7,21 @@ import SwipeableViews from 'react-swipeable-views'
 import LinearProgress from 'material-ui/LinearProgress'
 import { next } from './actions'
 
+const actionCreators = {
+    next
+}
+
 const mapStateToProps = ({ money, unit, basetime, rest_interval, rest_time ,distance, ansed, question, slideIndex, rate}) => ({
-  money, unit, basetime, rest_interval, rest_time, distance, ansed, question, slideIndex, rate
+    money,
+    unit,
+    basetime,
+    rest_interval,
+    rest_time,
+    distance,
+    ansed,
+    question,
+    slideIndex,
+    rate
 })
 
 class Question extends Component  {
@@ -19,8 +32,7 @@ class Question extends Component  {
 
   next(value) {
     this.only = true
-    const{ dispatch } = this.props
-    dispatch(next(value))
+    this.props.next(value)
   }
 
   Question_text(index){
@@ -104,4 +116,4 @@ class Question extends Component  {
   }
 }
 
-export default connect(mapStateToProps)(Question)
+export default connect(mapStateToProps, actionCreators)(Question)
