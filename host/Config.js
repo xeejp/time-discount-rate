@@ -41,8 +41,9 @@ const mapStateToProps = ({ money, unit, basetime, distance, q_num, rest_interval
 class Config extends Component {
 	constructor(props, context) {
 		super(props, context)
-		var default_unit
-		if (!this.props.unit) {
+		const { unit } = this.props
+		var default_unit = unit
+		if (!default_unit) {
 			const text = ReadJSON().dynamic_text
 			default_unit = text["Config"]["Unit"]
 			this.props.updateUnit(default_unit)
@@ -240,7 +241,6 @@ class Config extends Component {
 	}
 
 	handleClick() {
-		const { dispatch } = this.props
 		var { Basetime, Distance, Money, Lowlim, Uplim, Q_num, Rest_interval, Rest_time, Unit} = this.state
 		Basetime = Basetime.map((value)=>(parseInt(value, 10)))
 		Distance = parseInt(Distance, 10)

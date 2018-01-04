@@ -22,6 +22,10 @@ defmodule TimeDiscountRate.Host do
     data = Map.put(data, :unit, unit)
   end
 
+  def update_question(data, text) do
+    data = Map.put(data, :question_text, text)
+  end
+
   def change_page(data, page) do
     if data.page == "waiting" && page == "experiment" do
       data = data

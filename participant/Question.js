@@ -15,7 +15,7 @@ const actionCreators = {
     next
 }
 
-const mapStateToProps = ({ money, unit, basetime, rest_interval, rest_time ,distance, ansed, question, slideIndex, rate}) => ({
+const mapStateToProps = ({ money, unit, basetime, rest_interval, rest_time ,distance, ansed, question, slideIndex, rate, question_text}) => ({
     money,
     unit,
     basetime,
@@ -25,12 +25,13 @@ const mapStateToProps = ({ money, unit, basetime, rest_interval, rest_time ,dist
     ansed,
     question,
     slideIndex,
-    rate
+    rate,
+    question_text
 })
 
 class Question extends Component  {
-    constructor(props) {
-    super(props)
+    constructor(props, context) {
+    super(props, context)
     this.only = true
   }
 
@@ -40,10 +41,18 @@ class Question extends Component  {
   }
 
   Question_text(index){
-	  const { money, unit, basetime, distance, question, rate} = this.props
+	  const { money, unit, basetime, distance, question, rate, question_text} = this.props
 	  const type = question[index]
       let basemoney = money;
-      let nextmoney = money*Math.pow(rate[type][1]/100,distance);
+      let nextmoney = money * Math.pow(rate[type][1] / 100, distance);
+      const left_date_text = (basetime[type] == 0) ?
+          question_text["date_text"]["today"]
+          : (basetime[type] == 1) ?
+              question_text["date_text"]["tomorrow"]
+              : InsertVariable(question_text["date_text"]["default"], {day: basetime[type]}, null)
+      const right_date_text = (basetime[type] == 0) ?
+          question_text["date_text"]["tomorrow"]   
+          : InsertVariable(question_text["date_text"]["default"], {day: basetime[type] + distance}, null)
       basemoney = Math.round(basemoney/100)*100
       nextmoney = Math.round(nextmoney/100)*100
       return (
@@ -51,14 +60,14 @@ class Question extends Component  {
    <RaisedButton onClick={this.next.bind(this, {choice: 1 ,type: type, rate: rate} )} style={{float:  'left', width: '40%', height: '300px', position: 'relative', margin: '5%'}}>
     <div style={{position: 'absolute', top: '40%', left: '50%', width: '100%', margin: '-1.5em 0 0 -50%'}}>
         {(() => {
-            return (<p>{(basetime[type]==0)?"今日、":(basetime[type]==1)?"明日、":basetime[type] + "日後に"}<br/>{basemoney.toLocaleString() + unit}<br/>を受け取る</p>)                        
+                          return (<p>{InsertVariable(question_text["question_text"], {date_text: left_date_text, money: basemoney, unit: unit })}</p>)                        
         })()}
      </div>
    </RaisedButton>
    <RaisedButton onClick={this.next.bind(this, {choice:2 ,type: type, rate: rate} )} style={{float: 'right', width: '40%', height: '300px', position: 'relative', margin: '5%'}} labelStyle={{position: 'absolute', top: '50%', left: '50%', width: '100%', margin: '-1.5em 0 0 -50%'}}>
      <div style={{position: 'absolute', top: '40%', left: '50%', width: '100%', margin: '-1.5em 0 0 -50%'}}>
         {(() => {
-            return (<p>{(basetime[type]==0)?"明日、":(basetime[type] + distance) + "日後に"}<br/>{nextmoney.toLocaleString() + unit}<br/>を受け取る</p>)                        
+            return (<p>{InsertVariable(question_text["question_text"], {date_text: right_date_text, money: nextmoney, unit: unit })}</p>)                        
         })()}
      </div>
    </RaisedButton>
@@ -89,7 +98,7 @@ class Question extends Component  {
   }
 
   render(){
-    const { money, unit, rest_interval, ansed, question, slideIndex} = this.props
+    const { money, unit, rest_interval, ansed, question, slideIndex, question_text} = this.props
     var Questions = question.concat()
     var index
     console.log(question)
@@ -109,7 +118,7 @@ class Question extends Component  {
         <div>
         	<p>{$s["title"]}</p>
       		<div style={{height: 'auto'}}>
-      	  	<h5>どちらが良いか選択してください</h5>
+      	  	<h5>{question_text["select_text"]}</h5>
         		<SwipeableViews index={slideIndex} disabled={true}>          		
                   {questionlist}
         		</SwipeableViews>

@@ -2,6 +2,15 @@
     "dynamic_text": {
         "Config": {
             "Unit": "円"
+        },
+        "Question": {
+            "date_text": {
+                "today": "今日",
+                "tomorrow": "明日",
+                "default": "<day>日後に"
+            }, 
+            "question_text": "<date_text>、<money><unit>\nを受け取る",
+            "select_text": "どちらが良いか選択してください"
         }
     },
     "static_text": {
@@ -62,6 +71,21 @@
                 ]
             },
             "EditQuestion": {
+                "message": "質問文を更新しました。",
+                "reset_message": "質問文をリセットしました。",
+                "dialog": "オプション",
+                "button": [
+                    "適用",
+                    "キャンセル",
+                    "初期化"
+                ],
+                "labels": [
+                    "質問の文章",
+                    "参加者に常に表示させる文章",
+                    "0日後の代わりに表示させる文章",
+                    "1日後の代わりに表示させる文章",
+                    "上記以外の場合に表示させる文章"
+                ]
 
             },
             "Information": {
