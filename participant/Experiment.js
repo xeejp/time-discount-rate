@@ -9,6 +9,11 @@ import Question from './Question'
 import { Start } from './actions'
 import Result from './Result'
 
+import { ReadJSON, InsertVariable } from '../shared/ReadJSON'
+
+const multi_text = ReadJSON().static_text
+const $s = multi_text["participant"]["Experiment"]
+
 const actionCreators = {
 	Start
 }
@@ -67,10 +72,10 @@ class Experiment extends Component {
 		case 0:
 			return (
 				<Card>
-					<CardTitle title="時間割引率" subtitle="ルールの説明" />
+					<CardTitle title={$s["title"]} subtitle={$s["subtitle"]} />
 					<CardText>
-						<p>いくつかの二択の質問に答えてもらいます</p>
-						<p>OKを押すと実験が始まります</p> <br/>
+						{$s["descrption"]}
+            <br />
 						<RaisedButton onClick = {this.start.bind(this)} style ={{textAlign: "center"}} primary={true} >OK</RaisedButton>
 					</CardText>
 				</Card>
@@ -78,9 +83,9 @@ class Experiment extends Component {
     case 1:
       return (<Card><CardText><Question /></CardText></Card>)
 		case 2:
-			return (<div> <p>結果画面</p>{<Result />}</div>)
+			return (<div> <p>{$s["result"]}</p>{<Result />}</div>)
     }
   }
 }
-
+  
 export default connect(mapStateToProps, actionCreators)(Experiment)

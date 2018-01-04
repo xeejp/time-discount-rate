@@ -3,6 +3,10 @@ import { connect } from 'react-redux'
 
 import {Card, CardText, CardTitle } from 'material-ui/Card'
 import CircularProgress from 'material-ui/CircularProgress'
+import { ReadJSON, InsertVariable } from '../shared/ReadJSON'
+
+const multi_text = ReadJSON().static_text
+const $s = multi_text["participant"]["Waiting"]
 
 const mapStateToProps = ({ participantsNumber }) => ({
 	participantsNumber
@@ -10,11 +14,9 @@ const mapStateToProps = ({ participantsNumber }) => ({
 
 const Waiting = ({ participantsNumber }) => (
 	<Card>
-		<CardTitle title="時間割引率" subtitle="待機画面" />
+		<CardTitle title={$s["title"]} subtitle={$s["subtitle"]} />
 		<CardText>
-			<p>参加者の登録を待っています。</p>
-            <p>現在{participantsNumber}人が参加してます。</p>
-			<p>この画面のまましばらくお待ち下さい。</p>
+			{$s["text"].map((text, index) => <p key={index}>{InsertVariable(text, {participantsNumber: participantsNumber}, null)}</p>)}
 		</CardText>
 		<div style={{textAlign: "center"}}>
 			<CircularProgress size={2}/>

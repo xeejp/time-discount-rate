@@ -12,10 +12,15 @@ import {Tabs, Tab} from 'material-ui/Tabs'
 import SnackBar from 'material-ui/SnackBar'
 import Dialog from 'material-ui/Dialog'
 
-import { updateConfig, visit } from './actions'
+import { updateConfig, updateUnit, visit } from './actions'
+import { ReadJSON, InsertVariable } from '../shared/ReadJSON'
+
+const multi_text = ReadJSON().static_text
+const $s = multi_text["host"]["Config"]
 
 const actionCreators = {
-    updateConfig,
+	updateConfig,
+	updateUnit,
     visit
 }
 
@@ -36,6 +41,12 @@ const mapStateToProps = ({ money, unit, basetime, distance, q_num, rest_interval
 class Config extends Component {
 	constructor(props, context) {
 		super(props, context)
+		var default_unit
+		if (!this.props.unit) {
+			const text = ReadJSON().dynamic_text
+			default_unit = text["Config"]["Unit"]
+			this.props.updateUnit(default_unit)
+		}
 		this.state = {
 			Basetime: [0,7,14,10],
 			Q_num: 3,
@@ -45,7 +56,7 @@ class Config extends Component {
 			Uplim: 150,
 			Lowlim: 80,
 			Money: 7500,
-			Unit: "円",
+			Unit: default_unit,
 
 			BasetimeValid: true,
 			Q_numValid: true,
@@ -58,7 +69,7 @@ class Config extends Component {
 			open: false,
 			snack: false,
 			slideIndex: 0,
-			message: "設定を送信しました。"
+			message: $s["message"]
 		}
 	}
 
@@ -94,6 +105,9 @@ class Config extends Component {
 	}
 
 	reset() {
+		const text = ReadJSON().dynamic_text
+		default_unit = text["Config"]["Unit"]
+
 		const options = {
 			basetime: [0,7,14,10],
 			q_num: 3,
@@ -103,14 +117,14 @@ class Config extends Component {
 			uplim: 150,
 			lowlim: 80,
 			money: 7500,
-			unit: "円",
+			unit: default_unit
 		}
 		this.setState({
 			open: false,
 			snack: true,
-			message: "設定を初期化しました。"
+			message: $s["reset_message"]
 		})
-		this.props.updateConfig(config)
+		this.props.updateConfig(options)
 	}
 
 	closeSnack() {
@@ -239,17 +253,17 @@ class Config extends Component {
 		this.setState({
 			snack: true,
 			open: false,
-			message: "設定を送信しました。"
+			message: $s["message"]
 		})
 		let config = {
 			basetime: Basetime,
 			distance: Distance,
 			money: Money,
-			lowlim: Lowlim,
-			uplim: Uplim,
+			lowlim: Lowlim + '',
+			uplim: Uplim + '',
 			q_num: Q_num,
 			rest_interval: Rest_interval,
-			rest_time: Rest_time,
+			rest_time: Rest_time + '',
 			unit: Unit
 		}
 		Object.keys(config).forEach(
@@ -296,10 +310,10 @@ class Config extends Component {
 					</td>
 					<td>
 						<TextField
-								floatingLabelText="元の日数"
+								floatingLabelText={$s["baseTime"]["label"]}
 								defaultValue={value}
 								onChange={this.handleChangeBasetime.bind(this, index)}
-						/>日
+						/>{$s["baseTime"]["unit"]}
 					</td></tr>
 				)}
 			<tr><td>
@@ -322,15 +336,15 @@ class Config extends Component {
 				<tbody>
 				<tr><td>
 					<TextField
-						floatingLabelText="差分"
+						floatingLabelText={$s["distance"]["label"]}
 						defaultValue={this.state.Distance}
 						onChange={this.handleChangeDis.bind(this)}
 					/>
-					日
+					{$s["distance"]["unit"]}
 				</td></tr>
 				<tr><td>
 					<TextField
-						floatingLabelText="元金(100以上の整数)"
+						floatingLabelText= {InsertVariable($s["money"]["label"],{moneyMin: 100},null)}
 						defaultValue={this.state.Money}
 						onChange={this.handleChangeMoney.bind(this)}
 					/>
@@ -338,41 +352,41 @@ class Config extends Component {
 				</td></tr>
 				<tr><td>
 					<TextField
-						floatingLabelText="割引率の下限"
+						floatingLabelText={$s["lim"]["lowLabel"]}
 						defaultValue={this.state.Lowlim}
 						onChange={this.handleChangeLow.bind(this)}
 					/>%
-					～ 
+					{$s["lim"]["tilde"]} 
 					<TextField
-						floatingLabelText="割引率の上限"
+						floatingLabelText={$s["lim"]["upLabel"]}
 						defaultValue={this.state.Uplim}
 						onChange={this.handleChangeUp.bind(this)}
 					/>%
 				</td></tr>
 				<tr><td>
 					<TextField
-						floatingLabelText="日数１つ当たり質問数"
+						floatingLabelText={$s["q_num"]["label"]}
 						defaultValue={this.state.Q_num}
 						onChange={this.handleChangeQnum.bind(this)}
-					/>個
+					/>{$s["q_num"]["unit"]}
 				</td></tr>
 				<tr><td>
 					<TextField
-						floatingLabelText="休憩間隔"
+						floatingLabelText={$s["rest_interval"]["label"]}
 						defaultValue={this.state.Rest_interval}
 						onChange={this.handleChangeRestI.bind(this)}
-					/>個
+					/>{$s["rest_interval"]["unit"]}
 				</td></tr>
 				<tr><td>
 					<TextField
-						floatingLabelText="休憩時間"
+						floatingLabelText={$s["rest_time"]["label"]}
 						defaultValue={this.state.Rest_time}
 						onChange={this.handleChangeRestT.bind(this)}
-					/>秒
+					/>{$s["rest_time"]["unit"]}
 				</td></tr>
 				<tr><td>
 					<TextField
-						floatingLabelText= "単位"
+						floatingLabelText={$s["unit"]["label"]}
 						defaultValue={this.state.Unit}
 						onChange={this.handleChangeUnit.bind(this)}
 					/>
@@ -394,16 +408,16 @@ class Config extends Component {
 		const actions = [
 			<RaisedButton
 			primary={true}
-			label= {"適用"}
+			label= {$s["button"][0]}
 			disabled={!this.disabled()}
 			onTouchTap={this.handleClick.bind(this)}
 			/>,
 			<RaisedButton
-			label={"キャンセル"}
+			label={$s["button"][1]}
 			onTouchTap={this.handleClose.bind(this)}
 			/>,
 			<RaisedButton
-			label={"初期化"}
+			label={$s["button"][2]}
 			onTouchTap={this.reset.bind(this)}
 			/>
 		]
@@ -416,7 +430,7 @@ class Config extends Component {
 					<ActionSettings />
 				</FloatingActionButton>
 				<Dialog
-					title = "オプション"
+					title = {$s["dialog"]}
 					actions={actions}
 					model={false}
 					open={this.state.open}
@@ -426,8 +440,8 @@ class Config extends Component {
 					onChange={this.handleSlideIndex.bind(this)}
 					value={this.state.slideIndex}
 				>
-					<Tab label="元の日数" value={0} />
-            		<Tab label="その他" value={1} />
+					<Tab label={$s["tab"][0]} value={0} />
+            		<Tab label={$s["tab"][1]} value={1} />
 				</Tabs>
 				<SwipeableViews
 					index={this.state.slideIndex}

@@ -6,8 +6,11 @@ import RaisedButton from 'material-ui/RaisedButton'
 import { Step, Stepper, StepButton } from 'material-ui/Stepper'
 
 import { changePage } from './actions'
+import { ReadJSON, InsertVariable } from '../shared/ReadJSON'
+import { getPage } from '../shared/getPage'
 
-import { getPage } from 'util/index'
+const multi_text = ReadJSON().static_text
+const $s = multi_text["host"]["PageButtons"]
 
 const pages = ["waiting", "experiment", "result"]
 
@@ -72,13 +75,13 @@ class PageButtons extends Component {
           {buttons}
         </Stepper>
         <FlatButton
-          label={"戻る"}  
+          label={$s["back"]}  
           onClick={this.backPage.bind(this)}
           disabled={page == "waiting"}
           style={{ marginLeft: '3%' }}>
         </FlatButton>
         <RaisedButton
-          label={"次へ"}  
+          label={$s["next"]}  
           onClick={this.nextPage.bind(this)}
           primary={true}
           style={{ marginLeft: '3%' }}>

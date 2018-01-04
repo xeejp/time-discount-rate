@@ -1,0 +1,132 @@
+{
+    "dynamic_text": {
+        "Config": {
+            "Unit": "円"
+        }
+    },
+    "static_text": {
+        "host": {
+            "App": {
+
+            },
+            "Config": {
+                "message": "設定を送信しました。",
+                "reset_message": "設定を初期化しました。",
+                "baseTime": {
+                    "label": "元の日数",
+                    "unit": "日"
+                },
+                "distance": {
+                    "label": "差分",
+                    "unit": "日"
+                },
+                "money": {
+                    "label": "元金(<moneyMin>以上の整数)"
+                },
+                "lim": {
+                    "lowLabel": "割引率の下限",
+                    "tilde": "～",
+                    "upLabel": "割引率の上限"
+                },
+                "q_num": {
+                    "label": "日数１つ当たり質問数",
+                    "unit": "個"
+                },
+                "rest_interval": {
+                    "label": "休憩間隔",
+                    "unit": "個"
+                },
+                "rest_time": {
+                    "label": "休憩時間",
+                    "unit": "秒"
+                },
+                "unit": {
+                    "label": "単位"
+                },
+                "button": [
+                    "適用",
+                    "キャンセル",
+                    "初期化"
+                ],
+                "dialog": "オプション",
+                "tab": [
+                    "元の日数",
+                    "その他"
+                ]
+            },
+            "DownloadButton": {
+                "text": [
+                    "時間割引率",
+                    "実験日",
+                    "登録者数"
+                ]
+            },
+            "EditQuestion": {
+
+            },
+            "Information": {
+                "text": [
+                    "待機画面です。",
+                    "実験画面です。全員が回答すると自動的に結果に遷移します。",
+                    "結果画面です。"
+                ]
+            },
+            "PageButtons": {
+                "back": "戻る",
+                "next": "次へ"
+            },
+            "Result": {
+                "title": "実験結果"
+            },
+            "Users": {
+                "status": [
+                    "待機中",
+                    "回答中",
+                    "回答済み"
+                ],
+                "title": "登録者 <participants>人"
+            }
+        },
+        "participant": {
+            "App": {
+
+            },
+            "Experiment": {
+                "title": "時間割引率",
+                "subtitle": "ルールの説明",
+                "descrption": "いくつかの二択の質問に答えてもらいます\nOKを押すと実験が始まります",
+                "result": "結果画面"
+            },
+            "Pages": {
+                "result": "結果画面"                
+            },
+            "Question": {
+                "wait": "しばらくお待ちください",
+                "finish": "これで実験は終了です",
+                "finishButton": "結果へ",
+                "title": "実験画面"
+            },
+            "Result": {
+
+            },
+            "Waiting": {
+                "title": "時間割引率",
+                "subtitle": "待機画面",
+                "text":[
+                    "参加者の登録を待っています。",
+                    "現在<participantsNumber>人が参加してます。",
+                    "この画面のまましばらくお待ち下さい。"
+                ]
+            }
+        },
+        "shared": {
+            "getPage": {
+                "text": [
+                    "待機",
+                    "実験",
+                    "結果"
+                ]
+            }
+        }
+    }
+}

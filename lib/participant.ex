@@ -29,7 +29,6 @@ defmodule TimeDiscountRate.Participant do
 				id => true
 			},
 			participants_number: "participantsNumber",
-			finish_description_number: false,
 			is_first_visit: false,
 			history: false,
 			is_first_visit: true,

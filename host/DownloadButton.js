@@ -4,6 +4,11 @@ import { connect } from 'react-redux'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import FileFileDownload from 'material-ui/svg-icons/file/file-download'
 
+import { ReadJSON, InsertVariable } from '../shared/ReadJSON'
+
+const multi_text = ReadJSON().static_text
+const $s = multi_text["host"]["DownloadButton"]
+
 const mapStateToProps = ({ participants, page }) => ({
   participants,
   page
@@ -19,9 +24,9 @@ class DownloadButton extends Comment {
     const { participants, page } = this.props
     const fileName = "time_discount_rate.csv"
     const list=[
-      ["時間割引率"],
-      ["実験日", new Date()],
-      ["登録者数", Object.keys(participants).length]
+      [$s["text"][0]],
+      [$s["text"][1], new Date()],
+      [$s["text"][2], Object.keys(participants).length]
     ]
     const style = { marginLeft: '2%' }
     const disabled = page != "result"

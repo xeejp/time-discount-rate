@@ -8,10 +8,9 @@ defmodule TimeDiscountRate.Main do
     %{
       is_first_visit: true,      
       page: "waiting", 
-      description: nil,
+      question_text: nil,
       participants: %{},
       participants_number: 0,
-      finish_description_number: 0,
       
       anses: 0,
       basetime: [0,7,14,10],
@@ -22,7 +21,7 @@ defmodule TimeDiscountRate.Main do
       uplim: 150,
       lowlim: 80,
       money: 7500,
-      unit: "円",
+      unit: nil,
       results: %{},
       history: []
     }
@@ -30,7 +29,6 @@ defmodule TimeDiscountRate.Main do
 
   def new_participant(id) do
     %{
-      is_finish_description: false,
       id: id,
       ansed: false,
       rate: [],

@@ -6,6 +6,11 @@ import throttle from 'react-throttle-render'
 import { openParticipantPage } from './actions'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 
+import { ReadJSON, InsertVariable } from '../shared/ReadJSON'
+
+const multi_text = ReadJSON().static_text
+const $s = multi_text["host"]["Users"]
+
 const User = ({ id, status }) => (
   <tr><td>{id}</td><td>{status}</td></tr>
 )
@@ -26,11 +31,11 @@ const UsersList = ({participants, page }) => (
             id={id}
             status={
               (participants[id].state == 0)
-              ?"待機中"
+              ?$s["status"][0]
               :(participants[id].state == 1)
-              ?"回答中"
+              ?$s["status"][1]
               :(participants[id].state == 2)
-              ?"回答済み"
+              ?$s["status"][2]
               :"-"
             }
           />
@@ -59,7 +64,7 @@ class Users extends Component {
       <div>
         <Card>
           <CardHeader
-            title={"登録者 " + ((participants)? Object.keys(participants).length : "0") + "人"}
+            title={InsertVariable($s["title"], {participants: ((participants)? Object.keys(participants).length : "0")}, null)}
             actAsExpander={true}
             showExpandableButton={true}
           />

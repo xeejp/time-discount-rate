@@ -3,6 +3,10 @@ import { connect } from 'react-redux'
 import throttle from 'react-throttle-render'
 
 import { Card, CardHeader, CardText } from 'material-ui/Card'
+import { ReadJSON, InsertVariable } from '../shared/ReadJSON'
+
+const multi_text = ReadJSON().static_text
+const $s = multi_text["host"]["Result"]
 
 const mapStateToProps = ({results,basetime,uplim,lowlim}) => ({
   results,
@@ -23,7 +27,7 @@ class Result extends Component {
       <div>
         <Card>
           <CardHeader
-            title={"実験結果"}
+            title={$s["title"]}
             actAsExpander={true}
             showExpandableButton={true}
           />

@@ -1,6 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import { ReadJSON, InsertVariable } from '../shared/ReadJSON'
+
+const multi_text = ReadJSON().static_text
+const $s = multi_text["host"]["Information"]
+
 const mapStateToProps = ({ page }) => ({
   page
 })
@@ -8,11 +13,11 @@ const mapStateToProps = ({ page }) => ({
 const Information = ({ page }) =>
 <div>
   { (page == "waiting")?
-    <p>待機画面です。</p>
+    <p>{$s["text"][0]}</p>
     : (page == "experiment")?
-    <p>実験画面です。全員が回答すると自動的に結果に遷移します。</p>
+    <p>{$s["text"][1]}</p>
     : (page == "result")?
-    <p>結果画面です。</p>
+    <p>{$s["text"][2]}</p>
     : <span></span>
   }
 </div>

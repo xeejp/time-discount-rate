@@ -6,6 +6,10 @@ import RaisedButton from 'material-ui/RaisedButton'
 import SwipeableViews from 'react-swipeable-views'
 import LinearProgress from 'material-ui/LinearProgress'
 import { next } from './actions'
+import { ReadJSON, InsertVariable } from '../shared/ReadJSON'
+
+const multi_text = ReadJSON().static_text
+const $s = multi_text["participant"]["Question"]
 
 const actionCreators = {
     next
@@ -68,7 +72,7 @@ class Question extends Component  {
           this.only = false
       }
       return(<div style={{margin: "5%"}}>
-      <p>しばらくお待ちください</p>
+      <p>{$s["wait"]}</p>
       <br/><br/><br/>
       <LinearProgress mode="indeterminate" />
       </div>
@@ -78,8 +82,8 @@ class Question extends Component  {
   finish(){
 	  const {rate} = this.props
       return(<div style={{margin: "5%"}}>
-      <p>これで実験は終了です</p>
-      <RaisedButton onClick={this.next.bind(this, {choice:1 ,type: -2, rate: rate})}>結果へ</RaisedButton>
+        <p>{$s["finish"]}</p>
+        <RaisedButton onClick={this.next.bind(this, { choice: 1, type: -2, rate: rate })}>{$s["finishButton"]}</RaisedButton>
       </div>
       )
   }
@@ -103,7 +107,7 @@ class Question extends Component  {
     questionlist[t-1] = <div key = {t}>{this.finish()}</div>
     return (
         <div>
-        	<p>実験画面</p>
+        	<p>{$s["title"]}</p>
       		<div style={{height: 'auto'}}>
       	  	<h5>どちらが良いか選択してください</h5>
         		<SwipeableViews index={slideIndex} disabled={true}>          		

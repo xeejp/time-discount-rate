@@ -24,7 +24,7 @@ defmodule TimeDiscountRate do
       {"fetch contents", _} -> Actions.update_host_contents(data)
       {"change page", page} -> Host.change_page(data, page)
       {"update config", config} -> Host.update_config(data, config)
-      {"update description", description} -> Host.update_description(data, description)
+      {"update unit", unit} -> Host.update_unit(data, unit)
       {"visit", _} -> Host.visit(data)
       _ -> {:ok, %{data: data}}
     end
