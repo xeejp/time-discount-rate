@@ -54,6 +54,8 @@ class App extends Component {
             style={{marginLeft: "2%"}}
             disabled={page != "waiting"}
           />
+          <DownloadButton />
+          
         </div>
       </MuiThemeProvider>
     )  }
