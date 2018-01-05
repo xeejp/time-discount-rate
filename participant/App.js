@@ -7,7 +7,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme'
 
-import { fetchContents } from 'shared/actions'
+import { fetchContents } from '../shared/actions'
 
 import Pages from './Pages'
 

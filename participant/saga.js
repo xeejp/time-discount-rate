@@ -1,7 +1,7 @@
 import { fork, take, call, select } from 'redux-saga/effects'
 import { takeEvery } from 'redux-saga'
 
-import { fetchContents } from 'shared/actions'
+import { fetchContents } from '../shared/actions'
 import { Start, next, ToResult} from './actions'
 
 function* fetchContentsSaga() {
