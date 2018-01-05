@@ -1,61 +1,80 @@
-import React from 'react'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
 import Highcharts from 'react-highcharts'
 
-const Chart1 = ({rate,history,basetime,uplim,lowlim}) => {
-	var lowrate = rate.map((value)=>(value[0]))
-	var uprate = rate.map((value)=>(value[2]))
-	lowrate = basetime.map((value,index) => ([value,lowrate[index]]))
-	uprate = basetime.map((value,index) => ([value,uprate[index]]))
-	console.log(basetime)
-	console.log(lowrate)
-	console.log(uprate)
-	return (<Highcharts 
-	config = {{
+import { ReadJSON, InsertVariable } from '../shared/ReadJSON'
+
+const multi_text = ReadJSON().static_text
+const $s = multi_text["shared"]["Chart1"]
+
+const mapStateToProps = ({ rate, basetime, uplim, lowlim }) => ({
+    rate,
+    basetime,
+    uplim,
+    lowlim
+})
+
+class Chart1 extends Component {
+	constructor(props, context) {
+		super(props, context)
+	}
+
+	render() {
+		const { rate, basetime, uplim, lowlim } = this.props
+		var lowrate = rate.map((value) => (value[0]))
+		var uprate = rate.map((value) => (value[2]))
+		lowrate = basetime.map((value, index) => ([value, lowrate[index]])).sort((a, b) => a[0] - b[0])
+		uprate = basetime.map((value, index) => ([value, uprate[index]])).sort((a, b) => a[0] - b[0])
+		console.log(basetime)
+		console.log(lowrate)
+		console.log(uprate)
+		return (<Highcharts
+			config={{
 				credits: {
-						enabled: false
+					enabled: false
 				},
 				chart: {
-					type: 'scatter'
+					type: 'line'
 				},
 				title: {
-						text: null
+					text: null
 				},
 				xAxis: {
-						title: {
-								text: '期間'
-						},
-						allowDecimals: false
+					title: {
+						text: $s["xAxis"]["title"]["text"]
+					},
+					labels: {
+						format: $s["xAxis"]["labels"]["format"],
+					},
+					allowDecimals: false,
 				},
 				yAxis: {
 					max: uplim,
 					min: lowlim,
-						title: {
-								text: '割引率'
-						},
-						labels: {
-								format: '{value} %',
-						}
-				},
-			/*	plotOptions: {
-					scatter: {
-						marker: {
-							radius: 5
-						},
-						tooltip: {
-							headerFormat: '<b>{series.name}</b><br>',
-							pointFormat: '{point.x} 日後, {point.y} %'
-						}
+					title: {
+						text: $s["yAxis"]["title"]["text"]
+					},
+					labels: {
+						format: $s["yAxis"]["labels"]["format"]
 					}
-				},*/
-				series: [{
-					name: '割引率の下限',
-					data: lowrate
-				},{
-					name: '割引率の上限',
+				},
+				series: [
+					{
+					name: $s["series"]["name"][1],
 					data: uprate
-				}]
-		}} />)
+					},
+					{
+					name: $s["series"]["name"][0],
+					data: lowrate
+				}],
+				tooltip: {
+					headerFormat: '<b>{point.x}日後</b><br>',
+					shared: true
+				}
+			}} />)
+
+	}
 }
 
-export default Chart1
+export default connect(mapStateToProps)(Chart1)

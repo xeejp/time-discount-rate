@@ -13,7 +13,7 @@ defmodule TimeDiscountRate.Main do
       participants_number: 0,
       
       anses: 0,
-      basetime: [0,7,14,10],
+      basetime: [0,7,10,14],
       q_num: 3,
       rest_interval: 4,
       rest_time: 3,

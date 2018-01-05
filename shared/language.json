@@ -141,7 +141,10 @@
                 "finishButton": "結果へ"
             },
             "Result": {
-                "title": "全体結果"
+                "title": [
+                    "個人結果",
+                    "全体結果"
+                ]
             },
             "Waiting": {
                 "title": "時間割引率",
@@ -182,6 +185,30 @@
                 },
                 "series": {
                     "name": "割引率"
+                }
+            },
+            "Chart1": {
+                "xAxis": {
+                    "title": {
+                        "text": "期間"
+                    },
+                    "labels": {
+                        "format": "{value} 日後"
+                    }
+                },
+                "yAxis": {
+                    "title": {
+                        "text": "割引率"
+                    },
+                    "labels": {
+                        "format": "{value} %"
+                    }
+                },
+                "series": {
+                    "name": [
+                        "割引率の下限",
+                        "割引率の上限"
+                    ]
                 }
             }
         }

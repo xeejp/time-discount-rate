@@ -107,10 +107,10 @@ class Config extends Component {
 
 	reset() {
 		const text = ReadJSON().dynamic_text
-		default_unit = text["Config"]["Unit"]
+		const default_unit = text["Config"]["Unit"]
 
 		const options = {
-			basetime: [0,7,14,10],
+			basetime: [0,7,10,14],
 			q_num: 3,
 			rest_interval: 4,
 			rest_time: 3,
@@ -242,7 +242,7 @@ class Config extends Component {
 
 	handleClick() {
 		var { Basetime, Distance, Money, Lowlim, Uplim, Q_num, Rest_interval, Rest_time, Unit} = this.state
-		Basetime = Basetime.map((value)=>(parseInt(value, 10)))
+		Basetime = Basetime.map((value)=>(parseInt(value, 10))).sort((a,b) => a-b)
 		Distance = parseInt(Distance, 10)
 		Money = parseInt(Money, 10)
 		Lowlim = parseFloat(Lowlim)+100
