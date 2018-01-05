@@ -33,7 +33,7 @@ defmodule TimeDiscountRate.Mixfile do
   # Type "mix help deps" for more examples and options 
   defp deps do 
     [{:xeethemescript, "~> 0.3.0"},
-    {:json_diff_ex, github: "ryo33/json_diff_ex", branch: "fix-master"},
+    {:json_diff_ex, "~> 0.6.0"},
     {:transmap, "~> 0.2.0"}]
   end 
 end 

@@ -1,4 +1,4 @@
-﻿import { ReadJSON, InsertVariable } from 'ReadJSON'
+﻿import { ReadJSON, InsertVariable } from './ReadJSON'
 
 const multi_text = ReadJSON().static_text
 const $s = multi_text["shared"]["getPage"]
