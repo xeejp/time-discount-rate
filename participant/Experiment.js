@@ -61,18 +61,16 @@ class Experiment extends Component {
         r.push(rate);
       }
     }
-    console.log(questions)
 		this.props.Start({questions:questions, rate:r})
 	}
   
   render() {
     const { money,unit,ansed,question,state} = this.props
-		console.log(state)
     switch (state){
 		case 0:
 			return (
 				<Card>
-					<CardTitle title={$s["title"]} subtitle={$s["subtitle"]} />
+					<CardTitle title={$s["title"]} subtitle={$s["subtitle"][0]} />
 					<CardText>
 						{$s["descrption"]}
             <br />
@@ -81,9 +79,21 @@ class Experiment extends Component {
 				</Card>
 			)
     case 1:
-      return (<Card><CardText><Question /></CardText></Card>)
+        return (
+          <Card>
+				  	<CardTitle title={$s["title"]} subtitle={$s["subtitle"][1]} />
+            <CardText>
+              <Question />
+            </CardText>
+          </Card>)
 		case 2:
-			return (<div> <p>{$s["result"]}</p>{<Result />}</div>)
+        return (
+          <Card>
+            <CardTitle title={$s["title"]} subtitle={$s["subtitle"][2]} />
+            <CardText>
+              <Result />
+            </CardText>
+          </Card>)
     }
   }
 }

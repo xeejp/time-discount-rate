@@ -125,9 +125,12 @@
             },
             "Experiment": {
                 "title": "時間割引率",
-                "subtitle": "ルールの説明",
-                "descrption": "いくつかの二択の質問に答えてもらいます\nOKを押すと実験が始まります",
-                "result": "結果画面"
+                "subtitle": [
+                    "ルールの説明",
+                    "実験画面",
+                    "結果画面"
+                ],
+                "descrption": "いくつかの二択の質問に答えてもらいます\nOKを押すと実験が始まります"
             },
             "Pages": {
                 "result": "結果画面"                
@@ -135,11 +138,10 @@
             "Question": {
                 "wait": "しばらくお待ちください",
                 "finish": "これで実験は終了です",
-                "finishButton": "結果へ",
-                "title": "実験画面"
+                "finishButton": "結果へ"
             },
             "Result": {
-
+                "title": "全体結果"
             },
             "Waiting": {
                 "title": "時間割引率",
@@ -158,6 +160,29 @@
                     "実験",
                     "結果"
                 ]
+            },
+            "Chart2": {
+                "error": "実験を終えた参加者がいません。",
+                "anses": "回答人数:<num>人",
+                "xAxis": {
+                    "title": {
+                        "text": "期間"
+                    },
+                    "labels": {
+                        "format": "{value} 日後"
+                    }
+                },
+                "yAxis": {
+                    "title": {
+                        "text": "割引率"
+                    },
+                    "labels": {
+                        "format": "{value} %"
+                    }
+                },
+                "series": {
+                    "name": "割引率"
+                }
             }
         }
     }

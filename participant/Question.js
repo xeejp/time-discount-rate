@@ -57,19 +57,19 @@ class Question extends Component  {
       nextmoney = Math.round(nextmoney/100)*100
       return (
   <span>
-   <RaisedButton onClick={this.next.bind(this, {choice: 1 ,type: type, rate: rate} )} style={{float:  'left', width: '40%', height: '300px', position: 'relative', margin: '5%'}}>
-    <div style={{position: 'absolute', top: '40%', left: '50%', width: '100%', margin: '-1.5em 0 0 -50%'}}>
-        {(() => {
-                          return (<p>{InsertVariable(question_text["question_text"], {date_text: left_date_text, money: basemoney, unit: unit })}</p>)                        
-        })()}
-     </div>
+    <RaisedButton tabIndex={-1} onClick={this.next.bind(this, {choice: 1 ,type: type, rate: rate} )} style={{float:  'left', width: '40%', height: '300px', position: 'relative', margin: '5%'}}>
+        <div style={{position: 'absolute', top: '40%', left: '50%', width: '100%', margin: '-1.5em 0 0 -50%'}}>
+            {(() => {
+                return (<p>{InsertVariable(question_text["question_text"], {date_text: left_date_text, money: basemoney, unit: unit })}</p>)                        
+            })()}
+        </div>
    </RaisedButton>
-   <RaisedButton onClick={this.next.bind(this, {choice:2 ,type: type, rate: rate} )} style={{float: 'right', width: '40%', height: '300px', position: 'relative', margin: '5%'}} labelStyle={{position: 'absolute', top: '50%', left: '50%', width: '100%', margin: '-1.5em 0 0 -50%'}}>
-     <div style={{position: 'absolute', top: '40%', left: '50%', width: '100%', margin: '-1.5em 0 0 -50%'}}>
-        {(() => {
-            return (<p>{InsertVariable(question_text["question_text"], {date_text: right_date_text, money: nextmoney, unit: unit })}</p>)                        
-        })()}
-     </div>
+   <RaisedButton tabIndex={-1} onClick={this.next.bind(this, {choice:2 ,type: type, rate: rate} )} style={{float: 'right', width: '40%', height: '300px', position: 'relative', margin: '5%'}} labelStyle={{position: 'absolute', top: '50%', left: '50%', width: '100%', margin: '-1.5em 0 0 -50%'}}>
+        <div style={{position: 'absolute', top: '40%', left: '50%', width: '100%', margin: '-1.5em 0 0 -50%'}}>
+            {(() => {
+                return (<p>{InsertVariable(question_text["question_text"], {date_text: right_date_text, money: nextmoney, unit: unit })}</p>)                        
+            })()}
+        </div>
    </RaisedButton>
   </span>)
   }
@@ -92,7 +92,7 @@ class Question extends Component  {
 	  const {rate} = this.props
       return(<div style={{margin: "5%"}}>
         <p>{$s["finish"]}</p>
-        <RaisedButton onClick={this.next.bind(this, { choice: 1, type: -2, rate: rate })}>{$s["finishButton"]}</RaisedButton>
+        <RaisedButton tabIndex={-1} onClick={this.next.bind(this, { choice: 1, type: -2, rate: rate })}>{$s["finishButton"]}</RaisedButton>
       </div>
       )
   }
@@ -101,11 +101,9 @@ class Question extends Component  {
     const { money, unit, rest_interval, ansed, question, slideIndex, question_text} = this.props
     var Questions = question.concat()
     var index
-    console.log(question)
     const list_size = question.length
     var questionlist = []
     var t= 0,s = 0
-    console.log(this.props)
     while(s < list_size){
         for(var j = 0; j < rest_interval && s < list_size ; j++){
             questionlist[t++] = <div key = {t}>{this.Question_text(s++)}</div>
@@ -116,7 +114,6 @@ class Question extends Component  {
     questionlist[t-1] = <div key = {t}>{this.finish()}</div>
     return (
         <div>
-        	<p>{$s["title"]}</p>
       		<div style={{height: 'auto'}}>
       	  	<h5>{question_text["select_text"]}</h5>
         		<SwipeableViews index={slideIndex} disabled={true}>          		

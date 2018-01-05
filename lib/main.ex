@@ -22,7 +22,7 @@ defmodule TimeDiscountRate.Main do
       lowlim: 80,
       money: 7500,
       unit: nil,
-      results: %{},
+      results: [],
       history: []
     }
   end

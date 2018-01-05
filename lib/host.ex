@@ -30,6 +30,7 @@ defmodule TimeDiscountRate.Host do
     if data.page == "waiting" && page == "experiment" do
       data = data
             |> Map.put(:anses, 0)
+            |> Map.put(:results, [])
             |> reset()
     end
     data = Map.update!(data, :page, fn _ -> page end)

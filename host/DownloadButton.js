@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import FloatingActionButton from 'material-ui/FloatingActionButton'
@@ -9,27 +9,35 @@ import { ReadJSON, InsertVariable } from '../shared/ReadJSON'
 const multi_text = ReadJSON().static_text
 const $s = multi_text["host"]["DownloadButton"]
 
-const mapStateToProps = ({ participants, page }) => ({
+const mapStateToProps = ({ participants, basetime, q_num, distance, uplim, lowlim, money, page }) => ({
   participants,
+  basetime,
+  q_num,
+  distance,
+  uplim,
+  lowlim,
+  money,
   page
 })
 
-class DownloadButton extends Comment {
+class DownloadButton extends Component {
   constructor(props, context) {
     super(props, context)
     this.state = {}
   }
 
-  handleDownload(){
-    const { participants, page, basetime, q_num, distance, uplim, lowlim, money } = this.props
+  handleDownload() {
+    const { participants, basetime, q_num, distance, uplim, lowlim, money } = this.props
     const fileName = "time_discount_rate.csv"
     const participantData = Object.keys(participants).reduce((acc, key) => {
       let participant = participants[key]
-      return acc.concat(
+      acc.push(
         [key,$s["uplim"]].concat(participant.rate.map(a => a[2]))
-      ).concat(
+      )
+      acc.push(
         ["",$s["lowlim"]].concat(participant.rate.map(a => a[0]))
       )
+      return acc
     },[])
     
     const list=[
@@ -41,7 +49,9 @@ class DownloadButton extends Comment {
       [$s["text"][5], distance],
       [$s["text"][6], uplim],
       [$s["text"][7], lowlim],
-      [$s["text"][8], money]
+      [$s["text"][8], money],
+      [],
+      ["",""].concat(basetime)
     ].concat(participantData)
     
     var content = list.map(line => line.join(',')).join("\n")
@@ -60,14 +70,16 @@ class DownloadButton extends Comment {
       a.click();  
     }
   }
+
   render() {
+    const { page } = this.props
     const style = { marginLeft: '2%' }
-    const disabled = page != "result"
+    const disabled = (page != "result")
     return (
       <FloatingActionButton
         style={style}
         disabled={disabled}
-        onClick={handleDownload}
+        onClick={this.handleDownload.bind(this)}
       >
         <FileFileDownload />
       </FloatingActionButton>

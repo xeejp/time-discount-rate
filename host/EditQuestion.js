@@ -116,7 +116,6 @@ class EditQuestion extends Component {
 
   render(){
     const { page } = this.props
-    console.log(this.state.question_texts)
     const actions = [
 			<RaisedButton
 			primary={true}

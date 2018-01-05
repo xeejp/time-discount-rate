@@ -20,8 +20,6 @@ function* resultSaga(){
 function* nextSaga(action){
   const { payload } = action
   const {choice, type, rate} = payload
-  console.log(choice)
-  console.log(type)
   switch(type){
     default:
       let next_rate = rate.concat()

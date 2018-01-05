@@ -17,12 +17,15 @@ defmodule TimeDiscountRate.Participant do
 	end
 
 	def finish(data,id) do
+		rate = get_in(data, [:participants, id, :rate])
 		data = data
 			   |>put_in([:participants,id,:state],2)
 			   |>put_in([:anses],data.anses+1)
+			   |>put_in([:results], [rate] ++ data.results)
 	  end
 	
 	def get_filter(data, id) do
+		state = get_in(data,[:participants, id, :state])
 		%{
 			_default: true,
 			participants: %{
@@ -32,6 +35,7 @@ defmodule TimeDiscountRate.Participant do
 			is_first_visit: false,
 			history: false,
 			is_first_visit: true,
+			results: (state == 2),
 			_spread: [[:participants, id]]	
 		}
 	end

@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import throttle from 'react-throttle-render'
 
+import Chart2 from '../components/Chart2'
+
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 import { ReadJSON, InsertVariable } from '../shared/ReadJSON'
 
@@ -32,7 +34,7 @@ class Result extends Component {
             showExpandableButton={true}
           />
           <CardText expandable={true}>
-           
+            <Chart2 />
           </CardText>
         </Card>
       </div>
